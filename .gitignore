@@ -1,0 +1,25 @@
+# Локальное окружение и кэш Python.
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Локальные настройки и секреты.
+.env
+.env.*
+!.env.example
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+~$*
+
+# Промежуточные файлы. Итоговые CSV, графики и отчёты сохраняются в Git.
+tmp/
+.local/
+*.log
