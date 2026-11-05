@@ -1,0 +1,93 @@
+{
+  "author": "Холодков Антон Евгеньевич",
+  "group": 517,
+  "N": 28,
+  "Q": 1,
+  "Y": 26,
+  "variant": 10,
+  "date": "2026-11-05",
+  "environment": {
+    "python": "3.12.14",
+    "system": "Darwin",
+    "machine": "arm64",
+    "numpy": "2.5.4",
+    "matplotlib": "3.11.2"
+  },
+  "series": [
+    {
+      "lab": 1,
+      "configurations": 3,
+      "seeds_per_configuration": 20,
+      "runs": 60,
+      "budget_per_run": 24000,
+      "unit": "objective evaluations"
+    },
+    {
+      "lab": 2,
+      "configurations": 5,
+      "seeds_per_configuration": 20,
+      "runs": 100,
+      "budget_per_run": 6000,
+      "unit": "objective evaluations"
+    },
+    {
+      "lab": 3,
+      "configurations": 2,
+      "seeds_per_configuration": 20,
+      "runs": 40,
+      "budget_per_run": 240,
+      "unit": "fitness candidate calls"
+    },
+    {
+      "lab": 4,
+      "configurations": 12,
+      "seeds_per_configuration": 30,
+      "runs": 360,
+      "budget_per_run": 30000,
+      "unit": "objective evaluations"
+    }
+  ],
+  "total_runs": 560,
+  "unit_tests_passed": 25,
+  "unit_tests": [
+    {
+      "lab": 1,
+      "passed": 7,
+      "log": "test_function_values_and_bounds (test_lab1.Lab1Tests.test_function_values_and_bounds) ... ok\ntest_invalid_parameters (test_lab1.Lab1Tests.test_invalid_parameters) ... ok\ntest_random_budget_and_reproduction (test_lab1.Lab1Tests.test_random_budget_and_reproduction) ... ok\ntest_reflection_multiple_periods (test_lab1.Lab1Tests.test_reflection_multiple_periods) ... ok\ntest_report_output_isolation_and_default_paths (test_lab1.Lab1Tests.test_report_output_isolation_and_default_paths) ... ok\ntest_reproducibility_budget_elitism (test_lab1.Lab1Tests.test_reproducibility_budget_elitism) ... ok\ntest_sbx_identity_at_no_crossing (test_lab1.Lab1Tests.test_sbx_identity_at_no_crossing) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.024s\n\nOK\n"
+    },
+    {
+      "lab": 2,
+      "passed": 6,
+      "log": "test_bad_plan_detected (test_lab2.ScheduleTests.test_bad_plan_detected) ... ok\ntest_repair_100_random_inputs (test_lab2.ScheduleTests.test_repair_100_random_inputs) ... ok\ntest_reproducibility_and_exact_partial_budget (test_lab2.ScheduleTests.test_reproducibility_and_exact_partial_budget) ... ok\ntest_size_and_conflicts (test_lab2.ScheduleTests.test_size_and_conflicts) ... ok\ntest_swap_preserves_counts_without_crossover (test_lab2.ScheduleTests.test_swap_preserves_counts_without_crossover) ... ok\ntest_validation (test_lab2.ScheduleTests.test_validation) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.077s\n\nOK\n"
+    },
+    {
+      "lab": 3,
+      "passed": 7,
+      "log": "test_all_architecture_parameter_counts (test_lab3.TestLab3.test_all_architecture_parameter_counts) ... ok\ntest_nondomination (test_lab3.TestLab3.test_nondomination) ... ok\ntest_scaler_and_split_leakage (test_lab3.TestLab3.test_scaler_and_split_leakage) ... ok\ntest_search_budget_reproducibility (test_lab3.TestLab3.test_search_budget_reproducibility) ... ok\ntest_search_is_independent_of_test_features_and_labels (test_lab3.TestLab3.test_search_is_independent_of_test_features_and_labels) ... ok\ntest_training_reproducibility (test_lab3.TestLab3.test_training_reproducibility) ... ok\ntest_variation_syntax (test_lab3.TestLab3.test_variation_syntax) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.321s\n\nOK\n"
+    },
+    {
+      "lab": 4,
+      "passed": 5,
+      "log": "test_budget_reproducibility_monotonicity (test_lab4.Invariants.test_budget_reproducibility_monotonicity) ... ok\ntest_functions (test_lab4.Invariants.test_functions) ... ok\ntest_invalid_budget (test_lab4.Invariants.test_invalid_budget) ... ok\ntest_reflection (test_lab4.Invariants.test_reflection) ... ok\ntest_ring_uses_snapshot (test_lab4.Invariants.test_ring_uses_snapshot) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.016s\n\nOK\n"
+    }
+  ],
+  "pdf_pages": [
+    5,
+    6,
+    5,
+    5
+  ],
+  "combined_pdf_pages": 21,
+  "independent_review": {
+    "lab1": "operators, budgets, exact replay and numerical reference",
+    "lab2": "100 saved schedules independently recomputed; constraints, score and budget match",
+    "lab3": "train-only preprocessing, validation-only selection, held-out test perturbation invariant",
+    "lab4": "360 runs,90000 checkpoints, budgets, monotonicity, statistics and replay checked"
+  },
+  "visual_review": "All PDF pages rendered and inspected; final charts use warm burgundy/olive/graphite palette.",
+  "notes": [
+    "Lab3 has equal candidate-call budgets; distinct trainings are reported separately.",
+    "Track B chosen for lab3; lecturer assignment/approval is not asserted.",
+    "Lab4 proposal is provided; lecturer approval and successful defense are not asserted."
+  ]
+}

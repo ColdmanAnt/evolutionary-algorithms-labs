@@ -23,3 +23,8 @@ Thumbs.db
 tmp/
 .local/
 *.log
+
+# Повторные локальные эксперименты.
+reproduced/
+scratch_run/
+scratch/

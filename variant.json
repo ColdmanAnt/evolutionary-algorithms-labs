@@ -1,10 +1,15 @@
 {
-  "N": 26,
+  "author": "Холодков Антон Евгеньевич",
+  "N": 28,
   "group": "Б24-517",
   "Q": 1,
   "Y": 26,
-  "V": 16,
+  "V": 10,
   "assignment_method": "formula",
   "lab1_dimension": 9,
-  "lab3_track": null
+  "lab3_track": "B",
+  "lab3_track_status": "chosen; separate lecturer assignment is not asserted",
+  "lab4_topic": 10,
+  "lab4_proposal": "lab4/proposal.txt",
+  "lab4_approval_status": "not confirmed"
 }

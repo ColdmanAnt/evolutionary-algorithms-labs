@@ -1,0 +1,63 @@
+{
+  "variant": 10,
+  "N": 28,
+  "Q": 1,
+  "Y": 26,
+  "group": 517,
+  "student": "Холодков Антон Евгеньевич",
+  "runs": 20,
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "budget": 6000,
+  "population": 60,
+  "selection": "tournament, k=3",
+  "crossover": "uniform,p=0.9",
+  "mutation_probability": 0.8,
+  "mutation_loci": 2,
+  "elitism": 1,
+  "penalty": 10000,
+  "data_seed": 10010,
+  "configs": [
+    [
+      "penalty",
+      "replace"
+    ],
+    [
+      "penalty",
+      "swap"
+    ],
+    [
+      "repair",
+      "replace"
+    ],
+    [
+      "repair",
+      "swap"
+    ],
+    [
+      "random",
+      "none"
+    ]
+  ],
+  "stop": "Точно budget вызовов Problem.evaluate в поиске; ремонт использует инкрементальные проверки ограничений, не фитнес."
+}

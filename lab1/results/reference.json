@@ -1,0 +1,17 @@
+{
+  "x": [
+    2.2029055173112786,
+    1.5707963320632525,
+    1.2849915711807522,
+    1.9230584691104946,
+    1.7204697736449477,
+    1.5707963285510154,
+    1.4544139719141165,
+    1.7560865210174925,
+    1.6557174168364512
+  ],
+  "value": -8.660151715641343,
+  "method": "100001 grid points per coordinate + 80 golden-section iterations",
+  "status": "numerical_reference_not_certified_global_optimum",
+  "lower_bound": -9
+}

@@ -1,0 +1,22 @@
+{
+  "student": "Холодков Антон Евгеньевич",
+  "group": 517,
+  "N": 28,
+  "Q": 1,
+  "Y": 26,
+  "variant": 10,
+  "dimension": 9,
+  "population": 80,
+  "elite": 2,
+  "budget": 24000,
+  "tournament_k": 3,
+  "crossover_probability": 0.9,
+  "sbx_eta": 10,
+  "mutation_probability": "1/dimension",
+  "sigma_fractions": [0.02, 0.10],
+  "seeds": [100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119],
+  "bounds": [0, "pi"],
+  "boundary_handling": "reflection",
+  "initialization": "uniform",
+  "stopping": "exact evaluation budget including initial population"
+}

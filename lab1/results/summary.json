@@ -1,0 +1,38 @@
+[
+  {
+    "algorithm": "GA_sigma_002",
+    "runs": 20,
+    "best": -8.65523673923143,
+    "mean": -8.250865983503418,
+    "median": -8.290968730169528,
+    "std_sample": 0.2574197177752251,
+    "worst": -7.771818320566692,
+    "feasible_share": 1.0,
+    "mean_seconds": 0.016851397830760107,
+    "evaluations": 24000
+  },
+  {
+    "algorithm": "GA_sigma_010",
+    "runs": 20,
+    "best": -8.660092031808302,
+    "mean": -8.643300530166293,
+    "median": -8.655001403534314,
+    "std_sample": 0.0195700577879247,
+    "worst": -8.61335848261761,
+    "feasible_share": 1.0,
+    "mean_seconds": 0.017090212448965757,
+    "evaluations": 24000
+  },
+  {
+    "algorithm": "Random",
+    "runs": 20,
+    "best": -4.984150969580677,
+    "mean": -4.610729072858829,
+    "median": -4.609448281196308,
+    "std_sample": 0.1953883814065731,
+    "worst": -4.199531486273443,
+    "feasible_share": 1.0,
+    "mean_seconds": 0.005820387380663305,
+    "evaluations": 24000
+  }
+]

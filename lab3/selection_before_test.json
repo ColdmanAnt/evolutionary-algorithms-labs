@@ -1,0 +1,42 @@
+{
+  "selection_rule": "min complexity, median archive complexity, min validation loss",
+  "selected": [
+    {
+      "seed": 100,
+      "gene": {
+        "mask": 4,
+        "width_index": 0,
+        "activation": 0
+      },
+      "key": "4:0:0",
+      "validation_loss": 0.6590912088362938,
+      "validation_accuracy": 0.57,
+      "parameters": 2
+    },
+    {
+      "seed": 117,
+      "gene": {
+        "mask": 7,
+        "width_index": 1,
+        "activation": 1
+      },
+      "key": "7:1:1",
+      "validation_loss": 0.47190237077006686,
+      "validation_accuracy": 0.79,
+      "parameters": 11
+    },
+    {
+      "seed": 104,
+      "gene": {
+        "mask": 3,
+        "width_index": 4,
+        "activation": 1
+      },
+      "key": "3:4:1",
+      "validation_loss": 0.269107515829923,
+      "validation_accuracy": 0.93,
+      "parameters": 49
+    }
+  ],
+  "test_used_for_selection": false
+}

@@ -1,0 +1,29 @@
+name: Проверка лабораторных
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Тесты и сохранённые результаты
+    runs-on: ubuntu-latest
+    steps:
+      - name: Получить исходники
+        uses: actions/checkout@v7
+      - name: Python 3.12
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
+      - name: Установить зависимости
+        run: python -m pip install -r requirements-dev.txt
+      - name: Проверить код, серии запусков и PDF
+        run: python tools/verify_bundle.py

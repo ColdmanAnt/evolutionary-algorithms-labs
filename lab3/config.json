@@ -1,0 +1,75 @@
+{
+  "variant": 10,
+  "N": 28,
+  "Q": 1,
+  "Y": 26,
+  "track": "B",
+  "group": 517,
+  "author": "Холодков Антон Евгеньевич",
+  "data_seed": 1051728,
+  "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118,
+    119
+  ],
+  "population": 24,
+  "fitness_budget": 240,
+  "epochs_per_training": 280,
+  "learning_rate": 0.12,
+  "l2": 0.0001,
+  "penalties": [
+    0.0,
+    0.004
+  ],
+  "widths": [
+    0,
+    2,
+    4,
+    8,
+    12
+  ],
+  "activations": [
+    "tanh",
+    "relu"
+  ],
+  "train_count": 280,
+  "validation_count": 100,
+  "test_count": 100,
+  "standardization_mean": [
+    0.016255912672688104,
+    -0.07796783322121172,
+    0.09541492092805298,
+    0.019897580347478322
+  ],
+  "standardization_scale": [
+    1.0752166464824449,
+    0.9613580825489234,
+    0.9165288228789328,
+    0.9830352237071297
+  ],
+  "tournament": 3,
+  "mask_bit_mutation": 0.12,
+  "width_mutation": 0.35,
+  "activation_mutation": 0.15,
+  "crossover": "uniform, probability 1",
+  "elitism": 1,
+  "memoization": "per run and configuration; candidate calls counted incl cache hits",
+  "stopping": "exact candidate evaluation budget; final generation may be partial"
+}

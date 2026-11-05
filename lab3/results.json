@@ -1,0 +1,171 @@
+{
+  "summaries": [
+    {
+      "penalty": 0.0,
+      "fitness": {
+        "best": 0.269107515829923,
+        "mean": 0.29072042539490406,
+        "median": 0.28899781045556366,
+        "std": 0.013869194031176656,
+        "worst": 0.3257223602573694
+      },
+      "validation_loss": {
+        "best": 0.269107515829923,
+        "mean": 0.29072042539490406,
+        "median": 0.28899781045556366,
+        "std": 0.013869194031176656,
+        "worst": 0.3257223602573694
+      },
+      "test_loss": {
+        "best": 0.26495154718479264,
+        "mean": 0.2987555870748946,
+        "median": 0.302861316532122,
+        "std": 0.01997786674871714,
+        "worst": 0.3392443322841926
+      },
+      "test_accuracy": {
+        "best": 0.99,
+        "mean": 0.9345000000000001,
+        "median": 0.92,
+        "std": 0.025644328397276605,
+        "worst": 0.9
+      },
+      "parameters": {
+        "best": 33.0,
+        "mean": 52.8,
+        "median": 49.0,
+        "std": 9.752732410646988,
+        "worst": 73.0
+      },
+      "seconds": {
+        "best": 0.5313514169538394,
+        "mean": 0.604349020839436,
+        "median": 0.599356499966234,
+        "std": 0.03760710000973402,
+        "worst": 0.669831708073616
+      },
+      "distinct_trainings": {
+        "best": 75.0,
+        "mean": 83.55,
+        "median": 82.5,
+        "std": 4.989198859852942,
+        "worst": 93.0
+      }
+    },
+    {
+      "penalty": 0.004,
+      "fitness": {
+        "best": 0.38929339260292073,
+        "mean": 0.44861860956803623,
+        "median": 0.4545565024975407,
+        "std": 0.028778032123009032,
+        "worst": 0.4936902369476853
+      },
+      "validation_loss": {
+        "best": 0.27235158731016523,
+        "mean": 0.33581860956803616,
+        "median": 0.3277690481680946,
+        "std": 0.04035839986034189,
+        "worst": 0.4054709595848337
+      },
+      "test_loss": {
+        "best": 0.2891080514885725,
+        "mean": 0.3463434539389644,
+        "median": 0.34189073838869233,
+        "std": 0.04258983991215357,
+        "worst": 0.4447904681242466
+      },
+      "test_accuracy": {
+        "best": 0.95,
+        "mean": 0.9095000000000001,
+        "median": 0.92,
+        "std": 0.027810448623342622,
+        "worst": 0.82
+      },
+      "parameters": {
+        "best": 17.0,
+        "mean": 28.2,
+        "median": 33.0,
+        "std": 9.412198132434876,
+        "worst": 49.0
+      },
+      "seconds": {
+        "best": 0.4670033330330625,
+        "mean": 0.5826272729958873,
+        "median": 0.587366291496437,
+        "std": 0.052912836617163964,
+        "worst": 0.6690616250270978
+      },
+      "distinct_trainings": {
+        "best": 69.0,
+        "mean": 82.6,
+        "median": 82.0,
+        "std": 6.769902432632867,
+        "worst": 94.0
+      }
+    }
+  ],
+  "representatives": [
+    {
+      "seed": 100,
+      "gene": {
+        "mask": 4,
+        "width_index": 0,
+        "activation": 0
+      },
+      "key": "4:0:0",
+      "validation_loss": 0.6590912088362938,
+      "validation_accuracy": 0.57,
+      "parameters": 2,
+      "test_loss": 0.6691659912372989,
+      "test_accuracy": 0.54,
+      "label": "Компактный"
+    },
+    {
+      "seed": 117,
+      "gene": {
+        "mask": 7,
+        "width_index": 1,
+        "activation": 1
+      },
+      "key": "7:1:1",
+      "validation_loss": 0.47190237077006686,
+      "validation_accuracy": 0.79,
+      "parameters": 11,
+      "test_loss": 0.5231081847866227,
+      "test_accuracy": 0.73,
+      "label": "Компромиссный"
+    },
+    {
+      "seed": 104,
+      "gene": {
+        "mask": 3,
+        "width_index": 4,
+        "activation": 1
+      },
+      "key": "3:4:1",
+      "validation_loss": 0.269107515829923,
+      "validation_accuracy": 0.93,
+      "parameters": 49,
+      "test_loss": 0.2778592367669565,
+      "test_accuracy": 0.92,
+      "label": "Минимальная ошибка validation"
+    }
+  ],
+  "baselines": [
+    {
+      "model": "Константа по доле класса train",
+      "parameters": 1,
+      "test_loss": 0.696834210786303,
+      "test_accuracy": 0.5
+    },
+    {
+      "model": "Логистическая регрессия, все признаки",
+      "parameters": 5,
+      "validation_loss": 0.6633949385745851,
+      "test_loss": 0.6938326650538845,
+      "test_accuracy": 0.52
+    }
+  ],
+  "archive_count": 18
+}
