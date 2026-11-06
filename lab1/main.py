@@ -4,6 +4,7 @@ import argparse
 import csv
 import json
 import math
+from numbers import Integral, Real
 from pathlib import Path
 from time import perf_counter
 import numpy as np
@@ -13,6 +14,9 @@ ROOT = Path(__file__).resolve().parent
 
 def objective(x: np.ndarray) -> np.ndarray:
     """Одна строка = одна особь; пакетная обработка не меняет счётчик оценок."""
+    x = np.asarray(x, dtype=float)
+    if x.ndim not in (1, 2) or x.size == 0 or not np.all(np.isfinite(x)):
+        raise ValueError('Ожидается непустой конечный вектор или матрица особей')
     x = np.atleast_2d(x)
     i = np.arange(1, x.shape[1] + 1)
     return -np.sum(np.sin(x) * np.sin(i * x*x / np.pi)**20, axis=1)
@@ -20,6 +24,9 @@ def objective(x: np.ndarray) -> np.ndarray:
 
 def reflect(x: np.ndarray) -> np.ndarray:
     """Зеркальное восстановление [0, pi] при любом конечном выходе."""
+    x = np.asarray(x, dtype=float)
+    if not np.all(np.isfinite(x)):
+        raise ValueError('Отражение требует конечных координат')
     return np.pi - np.abs(np.mod(x, 2*np.pi) - np.pi)
 
 
@@ -42,12 +49,63 @@ def sbx(a: np.ndarray, b: np.ndarray, rng: np.random.Generator,
     return np.where(crossing, child, a)
 
 
+
+def _integer(value, name: str, minimum: int) -> None:
+    if isinstance(value, bool) or not isinstance(value, Integral) or value < minimum:
+        raise ValueError(f'{name}: требуется целое число не меньше {minimum}')
+
+
+def _finite_real(value, name: str) -> None:
+    if isinstance(value, bool) or not isinstance(value, Real) or not math.isfinite(value):
+        raise ValueError(f'{name}: требуется конечное вещественное число')
+
+
+def validate_config(config: dict, *, archived: bool = False) -> None:
+    """Фиксированные поля описывают реализованную модель и не игнорируются молча."""
+    if not isinstance(config, dict):
+        raise ValueError('Конфигурация должна быть JSON-объектом')
+    required = ('dimension', 'population', 'budget', 'elite',
+                'crossover_probability', 'sbx_eta', 'tournament_k')
+    if any(key not in config for key in required):
+        raise ValueError('В конфигурации отсутствуют обязательные параметры ГА')
+    for key, minimum in [('dimension', 2), ('population', 30), ('budget', config['population']),
+                         ('elite', 1), ('tournament_k', 1)]:
+        _integer(config[key], key, minimum)
+    if config['elite'] >= config['population']:
+        raise ValueError('Элитизм должен быть меньше размера популяции')
+    for key in ['crossover_probability', 'sbx_eta']:
+        _finite_real(config[key], key)
+    if not 0 <= config['crossover_probability'] <= 1 or config['sbx_eta'] <= 0:
+        raise ValueError('Некорректные параметры операторов в конфигурации')
+    for key, minimum in [('N', 1), ('Q', 0), ('Y', 0), ('group', 1), ('variant', 1)]:
+        if key in config:
+            _integer(config[key], key, minimum)
+    fixed = dict(student='Холодков Антон Евгеньевич', group=517, N=28, Q=1, Y=26,
+                 variant=10, mutation_probability='1/dimension', bounds=[0, 'pi'],
+                 boundary_handling='reflection', initialization='uniform',
+                 stopping='exact evaluation budget including initial population')
+    if any(key in config and config[key] != value for key, value in fixed.items()):
+        raise ValueError('Метаданные варианта или фиксированные параметры модели не соответствуют реализации')
+    if archived:
+        expected = dict(dimension=9, population=80, budget=24000, elite=2,
+                        crossover_probability=.9, sbx_eta=10, tournament_k=3,
+                        seeds=list(range(100, 120)), sigma_fractions=[.02, .10], **fixed)
+        if any(config.get(key) != value for key, value in expected.items()):
+            raise ValueError('Серия и её отчёт используют архивный план config.json; для отдельных изменённых параметров используйте --seed')
+
+
 def run_ga(seed: int, sigma_fraction: float, *, dimension: int = 9,
            population: int = 80, budget: int = 24000, elite: int = 2,
            crossover: float = .9, eta: float = 10., tournament_k: int = 3) -> dict:
-    if dimension < 2 or population < 30 or budget < population or not 0 < elite < population:
-        raise ValueError('Некорректные размерность, популяция, бюджет или элитизм')
-    if sigma_fraction <= 0 or not 0 <= crossover <= 1 or eta <= 0 or tournament_k < 1:
+    for name, value, minimum in [('seed', seed, 0), ('dimension', dimension, 2),
+                                  ('population', population, 30), ('budget', budget, population),
+                                  ('elite', elite, 1), ('tournament_k', tournament_k, 1)]:
+        _integer(value, name, minimum)
+    if elite >= population:
+        raise ValueError('Элитизм должен быть меньше размера популяции')
+    for name, value in [('sigma_fraction', sigma_fraction), ('crossover', crossover), ('eta', eta)]:
+        _finite_real(value, name)
+    if sigma_fraction <= 0 or not math.isfinite(sigma_fraction * math.pi) or not 0 <= crossover <= 1 or eta <= 0:
         raise ValueError('Некорректные параметры операторов')
     rng = np.random.default_rng(seed)
     start = perf_counter()
@@ -83,8 +141,9 @@ def run_ga(seed: int, sigma_fraction: float, *, dimension: int = 9,
 
 def run_random(seed: int, *, dimension: int = 9, population: int = 80,
                budget: int = 24000) -> dict:
-    if dimension < 2 or population < 1 or budget < population:
-        raise ValueError('Некорректные параметры случайного поиска')
+    for name, value, minimum in [('seed', seed, 0), ('dimension', dimension, 2),
+                                  ('population', population, 1), ('budget', budget, population)]:
+        _integer(value, name, minimum)
     rng = np.random.default_rng(seed)
     start = perf_counter()
     used, generation, best = 0, -1, float('inf')
@@ -111,6 +170,7 @@ def numerical_reference(dimension: int) -> dict:
     Не используется для инициализации, обучения или отбора ГА. Не является
     интервальным доказательством глобального минимума.
     """
+    _integer(dimension, 'dimension', 1)
     grid = np.linspace(0., np.pi, 100001)
     xs = []
     for i in range(1, dimension+1):
@@ -146,15 +206,9 @@ def save_json(path: Path, obj) -> None:
 
 
 def experiment(config: dict, output: Path) -> dict:
+    validate_config(config, archived=True)
     output.mkdir(parents=True, exist_ok=True)
     all_runs, rows, histories, summaries = {}, [], [], []
-    expected = dict(dimension=9,population=80,budget=24000,elite=2,
-                    crossover_probability=.9,sbx_eta=10,tournament_k=3,
-                    seeds=list(range(100,120)))
-    if any(config.get(key) != value for key,value in expected.items()):
-        raise ValueError('Серия и её отчёт используют архивный план config.json; для отдельных изменённых параметров используйте --seed')
-    if config['sigma_fractions'] != [.02, .10]:
-        raise ValueError('Для архивной сравнительной серии заданы масштабы 0.02 и 0.10; иной масштаб проверяйте через --seed и --sigma')
     for name, scale in [('GA_sigma_002', config['sigma_fractions'][0]),
                         ('GA_sigma_010', config['sigma_fractions'][1]), ('Random', None)]:
         runs = []
@@ -285,7 +339,7 @@ def create_report(config, summaries, reference, winner_name, winner, output):
           'Начальная популяция: 80 независимых равномерных точек в [0, π]^9. Минимизация ведётся непосредственно по f; дополнительного масштабирования фитнеса нет. В турнире из трёх индексов с возвращением выбирается особь с наименьшим f.',
           'SBX (simulated binary crossover) применяется с вероятностью 0,9 к паре векторов, индекс распределения η = 10. Для каждой координаты u ~ U(0,1); β = (2u)^(1/(η+1)) при u ≤ 0,5 и β = [1/(2(1-u))]^(1/(η+1)) иначе. Потомок = 0,5·[(1+sβ)a + (1-sβ)b], s равновероятно равен -1 или +1. При отсутствии кроссовера копируется первый родитель. SBX сохраняет смысл вещественных координат и допускает исследование окрестностей родителей.',
           'Каждая координата мутирует независимо с вероятностью 1/9: добавляется N(0,σ²). Единственный изменяемый фактор в двух конфигурациях — σ: 0,02π или 0,10π. Все остальные параметры и набор seed одинаковы. Отражение x ← π - |(x mod 2π) - π| возвращает любые конечные координаты в область, не накапливая точки на границе.',
-          'Два лучших родителя переходят в следующее поколение без повторной оценки; остальные места занимают лучшие оценённые потомки. За поколение оцениваются 80 новых особей. Инициализация также включена в бюджет: 80 + 299·80 = 24 000. Критерий остановки — ровно 24 000 вычислений функции. Реализация также поддерживает неполный последний пакет. Лучшее найденное значение никогда не ухудшается.'],image='algorithm_flow.png'),
+          'Два лучших родителя без повторной оценки включаются в пул кандидатов вместе с оценёнными потомками; из этого пула выбираются 80 лучших. Это гарантирует сохранение лучшего найденного решения; второй родитель может уступить место более качественным потомкам. За поколение оцениваются 80 новых особей. Инициализация также включена в бюджет: 80 + 299·80 = 24 000. Критерий остановки — ровно 24 000 вычислений функции. Реализация также поддерживает неполный последний пакет. Лучшее найденное значение никогда не ухудшается.'],image='algorithm_flow.png'),
       dict(heading='3. План эксперимента',paragraphs=[
           'Проведено по 20 независимых запусков каждой из двух конфигураций ГА и случайного поиска: всего 60 запусков. Использованы seed 100–119. Запуски внутри метода независимы; одинаковые seed между методами образуют парный дизайн. Случайный поиск генерирует 24 000 равномерных точек и сохраняет лучшую. Пакетная NumPy-обработка считает каждую строку отдельной оценкой; сравнение честно по числу целевых вычислений, а не по секундам.',
           'Параметры сохранены в config.json; runs.csv содержит отдельные результаты, history.csv — лучшие значения после каждого пакета, summary.csv — агрегаты. Стандартное отклонение выборочное (ddof = 1); допустимость проверена по всем особям конечных популяций. Время — однопроцессное фактическое время на текущем компьютере и зависит от оборудования.'],table=dict(headers=['Параметр','Значение'],rows=[['Популяция / элита','80 / 2'],['Бюджет на запуск','24 000'],['Число поколений после инициализации','299'],['Турнир / SBX η / p_c','3 / 10 / 0,9'],['p_m на координату','1/9'],['σ','0,02π либо 0,10π'],['Seed','100–119'],['Обработка ограничений','Отражение координат']])),
@@ -322,20 +376,28 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--config',type=Path,default=ROOT/'config.json')
     parser.add_argument('--output',type=Path,default=ROOT/'results')
-    parser.add_argument('--seed',type=int,help='Один воспроизводимый запуск ГА')
-    parser.add_argument('--sigma',type=float,default=.02,help='Масштаб мутации как доля π')
-    parser.add_argument('--replot',action='store_true',help='Обновить только рисунки из сохранённых CSV/JSON')
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument('--seed',type=int,help='Один воспроизводимый запуск ГА')
+    parser.add_argument('--sigma',type=float,help='Масштаб мутации как доля π (с --seed; по умолчанию 0.02)')
+    mode.add_argument('--replot',action='store_true',help='Обновить только рисунки из сохранённых CSV/JSON')
     args = parser.parse_args()
+    if args.sigma is not None and args.seed is None:
+        parser.error('--sigma применяется только вместе с --seed')
     if args.replot:
         replot_saved(args.output)
         return
-    config = json.loads(args.config.read_text(encoding='utf-8'))
-    if args.seed is not None:
-        result = run_ga(args.seed,args.sigma,dimension=config['dimension'],population=config['population'],budget=config['budget'],
-                        elite=config['elite'],crossover=config['crossover_probability'],eta=config['sbx_eta'],tournament_k=config['tournament_k'])
-        print(json.dumps({k:v for k,v in result.items() if k!='history'},ensure_ascii=False,indent=2))
-    else:
-        print(json.dumps(experiment(config,args.output),ensure_ascii=False,indent=2))
+    try:
+        config = json.loads(args.config.read_text(encoding='utf-8'))
+        validate_config(config, archived=args.seed is None)
+        if args.seed is not None:
+            sigma = .02 if args.sigma is None else args.sigma
+            result = run_ga(args.seed,sigma,dimension=config['dimension'],population=config['population'],budget=config['budget'],
+                            elite=config['elite'],crossover=config['crossover_probability'],eta=config['sbx_eta'],tournament_k=config['tournament_k'])
+            print(json.dumps({k:v for k,v in result.items() if k!='history'},ensure_ascii=False,indent=2))
+        else:
+            print(json.dumps(experiment(config,args.output),ensure_ascii=False,indent=2))
+    except (ValueError, KeyError, OSError) as error:
+        parser.error(str(error))
 
 if __name__ == '__main__':
     main()

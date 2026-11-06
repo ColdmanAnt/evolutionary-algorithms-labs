@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ЛР2: собственный ГА составления недельного графика дежурств."""
 from __future__ import annotations
-import argparse, csv, json, math, statistics, time
+import argparse, copy, csv, json, math, numbers, statistics, time
 from pathlib import Path
 import numpy as np
 
@@ -12,7 +12,23 @@ POP = 60
 PENALTY = 10000
 
 
+def nonnegative_integer(value, name, minimum=0):
+    """Не допускаем bool, дроби и неявное округление параметров."""
+    if isinstance(value, (bool, np.bool_)) or not isinstance(value, numbers.Integral) or value < minimum:
+        raise ValueError(f'{name}: требуется целое число не меньше {minimum}')
+    return int(value)
+
+
+def schedule_vector(value):
+    array = np.asarray(value)
+    if (array.shape != (SLOTS,) or array.dtype.kind not in 'iu'
+            or np.any(array < 0) or np.any(array >= STAFF)):
+        raise ValueError('Нужно ровно 21 целочисленное назначение с индексами сотрудников 0..6')
+    return array.astype(int, copy=False)
+
+
 def generate_data(seed: int = 10010) -> dict:
+    seed = nonnegative_integer(seed, 'seed')
     rng = np.random.default_rng(seed)
     witness = [(day + 2 * shift) % STAFF for day in range(7) for shift in range(3)]
     availability = (rng.random((SLOTS, STAFF)) < .80).astype(int)
@@ -30,20 +46,53 @@ def generate_data(seed: int = 10010) -> dict:
 
 class Problem:
     def __init__(self, data: dict):
-        self.data = data
-        self.available = np.asarray(data['availability'], dtype=bool)
-        self.costs = np.asarray(data['preference_costs'], dtype=int)
-        self.conflicts = np.asarray(data['conflicts'], dtype=int)
+        if not isinstance(data, dict):
+            raise ValueError('Данные задачи должны быть словарём')
+        required = {'staff', 'events', 'availability', 'preference_costs', 'conflicts',
+                    'max_shifts', 'max_nights', 'witness'}
+        if not required <= data.keys():
+            raise ValueError(f'Отсутствуют поля данных: {sorted(required - data.keys())}')
+        self.data = copy.deepcopy(data)
+        if (not isinstance(data['staff'], list) or len(data['staff']) != STAFF
+                or any(not isinstance(name, str) or not name.strip() for name in data['staff'])
+                or len(set(data['staff'])) != STAFF):
+            raise ValueError('Нужно 7 различных непустых имён сотрудников')
+        expected_events = [dict(id=i, day=i//3+1, shift=['Утро','День','Ночь'][i%3]) for i in range(SLOTS)]
+        if data['events'] != expected_events:
+            raise ValueError('Нужно 21 событие в порядке дней и смен Утро/День/Ночь')
+        availability = np.asarray(data['availability'])
+        costs = np.asarray(data['preference_costs'])
+        if (availability.shape != (SLOTS, STAFF) or availability.dtype.kind not in 'biu'
+                or np.any((availability != 0) & (availability != 1))):
+            raise ValueError('Доступность должна быть матрицей 21×7 из 0 и 1')
+        if (costs.shape != (SLOTS, STAFF) or costs.dtype.kind not in 'iu'
+                or np.any(costs < 0) or np.any(costs > 9)):
+            raise ValueError('Предпочтения должны быть целочисленной матрицей 21×7 со значениями 0..9')
+        max_shifts = nonnegative_integer(data['max_shifts'], 'max_shifts', 1)
+        max_nights = nonnegative_integer(data['max_nights'], 'max_nights', 1)
+        if max_shifts > SLOTS or max_nights > SLOTS // 3:
+            raise ValueError('Лимиты смен превышают длину недельного горизонта')
+        conflicts = np.asarray(data['conflicts'])
+        if conflicts.size == 0:
+            conflicts = np.empty((0, 2), dtype=int)
+        if (conflicts.ndim != 2 or conflicts.shape[1] != 2 or conflicts.dtype.kind not in 'iu'
+                or np.any(conflicts < 0) or np.any(conflicts >= SLOTS)
+                or np.any(conflicts[:, 0] == conflicts[:, 1])):
+            raise ValueError('Конфликты должны быть парами различных индексов событий 0..20')
+        if len({tuple(sorted(map(int, pair))) for pair in conflicts}) != len(conflicts):
+            raise ValueError('Конфликтные пары не должны повторяться')
+        self.available = availability.astype(bool, copy=True)
+        self.costs = costs.astype(int, copy=True)
+        self.conflicts = conflicts.astype(int, copy=True)
         self.neighbours = [[] for _ in range(SLOTS)]
         for a, b in self.conflicts:
             self.neighbours[a].append(int(b)); self.neighbours[b].append(int(a))
-        self.witness = np.asarray(data['witness'], dtype=int)
-        assert self.evaluate(self.witness)['violations'] == 0
+        self.witness = schedule_vector(data['witness']).copy()
+        if self.evaluate(self.witness)['violations'] != 0:
+            raise ValueError('Исходный резервный план должен удовлетворять всем ограничениям')
 
     def evaluate(self, x) -> dict:
-        x = np.asarray(x, dtype=int)
-        if x.shape != (SLOTS,) or np.any(x < 0) or np.any(x >= STAFF):
-            raise ValueError('Нужно ровно 21 назначение с индексами сотрудников 0..6')
+        x = schedule_vector(x)
         loads = np.bincount(x, minlength=STAFF)
         nights = np.bincount(x[2::3], minlength=STAFF)
         unavailable = int(np.count_nonzero(~self.available[np.arange(SLOTS), x]))
@@ -61,6 +110,7 @@ class Problem:
 
     def repair(self, original, rng) -> tuple[np.ndarray, bool]:
         """Жадное восстановление с сохранением исходных назначений, 12 попыток."""
+        original = schedule_vector(original)
         for _ in range(12):
             x = np.full(SLOTS, -1, dtype=int)
             loads = np.zeros(STAFF, dtype=int); nights = np.zeros(STAFF, dtype=int)
@@ -84,6 +134,9 @@ class Problem:
 
 
 def variation(a, b, rng, operator: str):
+    if operator not in ('swap', 'replace'):
+        raise ValueError('Оператор должен быть swap или replace')
+    a, b = schedule_vector(a), schedule_vector(b)
     child = a.copy()
     if rng.random() < .9:
         mask = rng.random(SLOTS) < .5
@@ -100,6 +153,14 @@ def variation(a, b, rng, operator: str):
 
 
 def run(problem: Problem, method: str, operator: str, seed: int, budget: int, pop_size: int = POP):
+    if method not in ('penalty', 'repair', 'random'):
+        raise ValueError('Метод должен быть penalty, repair или random')
+    allowed = ('replace', 'swap', 'none') if method == 'random' else ('replace', 'swap')
+    if operator not in allowed:
+        raise ValueError('Неизвестный оператор; none допустим только для случайного baseline')
+    seed = nonnegative_integer(seed, 'seed')
+    budget = nonnegative_integer(budget, 'budget', 1)
+    pop_size = nonnegative_integer(pop_size, 'pop_size', 2)
     if budget < pop_size:
         raise ValueError('Бюджет должен быть не меньше популяции')
     rng = np.random.default_rng(seed)
@@ -176,6 +237,10 @@ def write_csv(path, rows):
 
 
 def experiment(out: Path, runs: int, budget: int, seed_start: int):
+    runs = nonnegative_integer(runs, 'runs', 1)
+    budget = nonnegative_integer(budget, 'budget', POP)
+    seed_start = nonnegative_integer(seed_start, 'seed_start')
+    out = Path(out)
     out.mkdir(parents=True,exist_ok=True)
     data=generate_data(); (out/'data.json').write_text(json.dumps(data,ensure_ascii=False,indent=2))
     problem=Problem(data)
@@ -355,8 +420,17 @@ def main():
     ex=sub.add_parser('experiment');ex.add_argument('--runs',type=int,default=20);ex.add_argument('--budget',type=int,default=6000);ex.add_argument('--seed-start',type=int,default=0);ex.add_argument('--out',type=Path,default=HERE)
     one=sub.add_parser('single');one.add_argument('--method',choices=['penalty','repair','random'],default='repair');one.add_argument('--operator',choices=['replace','swap'],default='replace');one.add_argument('--seed',type=int,default=0);one.add_argument('--budget',type=int,default=6000)
     args=parser.parse_args()
+    try:
+        if args.command == 'experiment':
+            nonnegative_integer(args.runs, '--runs', 1)
+            nonnegative_integer(args.budget, '--budget', POP)
+            nonnegative_integer(args.seed_start, '--seed-start')
+        else:
+            nonnegative_integer(args.seed, '--seed')
+            nonnegative_integer(args.budget, '--budget', POP)
+    except ValueError as error:
+        parser.error(str(error))
     if args.command=='experiment':
-        if args.runs<1:parser.error('--runs >=1')
         experiment(args.out,args.runs,args.budget,args.seed_start)
     else:
         p=Problem(generate_data());r=run(p,args.method,args.operator,args.seed,args.budget);r.pop('history');print(json.dumps(r,ensure_ascii=False,indent=2))

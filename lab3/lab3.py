@@ -22,6 +22,19 @@ LEARNING_RATE = 0.12
 POPULATION = 24
 
 
+def _integer(value, *, minimum=0):
+    return isinstance(value, (int, np.integer)) and not isinstance(value, (bool, np.bool_)) and value >= minimum
+
+
+def _training_arrays(train_x, train_y):
+    x, y = np.asarray(train_x, dtype=float), np.asarray(train_y, dtype=float)
+    if x.ndim != 2 or x.shape[1] != 4 or len(x) == 0:
+        raise ValueError("training features must be a nonempty n-by-4 matrix")
+    if y.shape != (len(x),) or not np.all(np.isfinite(x)) or not np.all(np.isin(y, [0., 1.])):
+        raise ValueError("training data must be finite and labels must be a binary n-vector")
+    return x, y
+
+
 @dataclass(frozen=True)
 class Gene:
     mask: int
@@ -33,7 +46,9 @@ class Gene:
         return Gene(self.mask, self.width_index, self.activation if self.width_index else 0)
 
     def valid(self):
-        return 1 <= self.mask <= 15 and 0 <= self.width_index < len(WIDTHS) and self.activation in (0, 1)
+        return (_integer(self.mask, minimum=1) and self.mask <= 15 and
+                _integer(self.width_index) and self.width_index < len(WIDTHS) and
+                _integer(self.activation) and self.activation in (0, 1))
 
     @property
     def features(self):
@@ -67,6 +82,9 @@ def make_data(seed=DATA_SEED):
 
 
 def fit_scaler(train_x):
+    train_x = np.asarray(train_x, dtype=float)
+    if train_x.ndim != 2 or len(train_x) == 0 or train_x.shape[1] == 0 or not np.all(np.isfinite(train_x)):
+        raise ValueError("scaler requires a nonempty finite feature matrix")
     return np.mean(train_x, axis=0), np.maximum(np.std(train_x, axis=0), 1e-12)
 
 
@@ -80,7 +98,11 @@ def binary_loss(y, logits):
 
 def train_model(gene, train_x, train_y, run_seed, epochs=EPOCHS):
     """Воспроизводимая инициализация зависит от seed запуска и самой архитектуры."""
-    assert gene.valid()
+    if not isinstance(gene, Gene) or not gene.valid():
+        raise ValueError("invalid classifier genotype")
+    if not _integer(run_seed) or not _integer(epochs):
+        raise ValueError("seed and epochs must be nonnegative integers")
+    train_x, train_y = _training_arrays(train_x, train_y)
     gene = gene.canonical()
     rng = np.random.default_rng(np.random.SeedSequence([run_seed, gene.mask, gene.width_index, gene.activation]))
     x = train_x[:, gene.features]
@@ -156,6 +178,10 @@ def mutate(gene, rng):
 
 def nondominated(records):
     """Внешний архив по (ошибка validation, число параметров)."""
+    for record in records:
+        if (not np.isfinite(record["validation_loss"]) or record["validation_loss"] < 0 or
+                not _integer(record["parameters"], minimum=1)):
+            raise ValueError("archive objectives must be finite nonnegative loss and positive integer size")
     result = []
     for record in records:
         dominated = any(other["validation_loss"] <= record["validation_loss"] and
@@ -168,9 +194,41 @@ def nondominated(records):
     return sorted(result, key=lambda r: (r["parameters"], r["validation_loss"]))
 
 
+def select_representatives(archive):
+    """Выбор только по validation/сложности; test-метрики не читаются."""
+    unique_complexities = {}
+    for item in archive:
+        p = item["parameters"]
+        if p not in unique_complexities or item["validation_loss"] < unique_complexities[p]["validation_loss"]:
+            unique_complexities[p] = item
+    front = sorted(unique_complexities.values(), key=lambda r: r["parameters"])
+    if len(front) < 3:
+        raise ValueError("fewer than three archive complexities; increase --runs or --budget to prepare a complete report")
+    return [front[0], front[len(front) // 2], min(front, key=lambda r: r["validation_loss"])]
+
+
 def search(seed, penalty, budget, z, y, indices, population_size=POPULATION):
-    if budget < population_size or population_size < 4:
-        raise ValueError("budget >= population >= 4 required")
+    if not _integer(seed) or not _integer(budget) or not _integer(population_size, minimum=4) or budget < population_size:
+        raise ValueError("integer seed >= 0 and budget >= population >= 4 required")
+    if not isinstance(penalty, (int, float, np.integer, np.floating)) or isinstance(penalty, (bool, np.bool_)) or not np.isfinite(penalty) or penalty < 0:
+        raise ValueError("penalty must be finite and nonnegative")
+    z, y = np.asarray(z, dtype=float), np.asarray(y, dtype=float)
+    if z.ndim != 2 or z.shape[1] != 4 or y.shape != (len(z),):
+        raise ValueError("features must be n-by-4 and labels an n-vector")
+    split_indices, normalized_indices = [], {}
+    for name in ("train", "validation", "test"):
+        part = np.asarray(indices.get(name, []))
+        if (part.ndim != 1 or not np.issubdtype(part.dtype, np.integer) or len(part) == 0 or
+                np.any(part < 0) or np.any(part >= len(z))):
+            raise ValueError("train/validation/test indices must be nonempty integer vectors within the data")
+        split_indices.extend(part.tolist())
+        normalized_indices[name] = part
+    if len(set(split_indices)) != len(split_indices):
+        raise ValueError("train/validation/test splits must be disjoint and contain no repeated indices")
+    indices = normalized_indices
+    # Проверяем обучающую и validation-части; содержимое test не влияет на поиск.
+    _training_arrays(z[indices["train"]], y[indices["train"]])
+    _training_arrays(z[indices["validation"]], y[indices["validation"]])
     rng = np.random.default_rng(seed)
     train_x, train_y = z[indices["train"]], y[indices["train"]]
     val_x, val_y = z[indices["validation"]], y[indices["validation"]]
@@ -245,6 +303,8 @@ def describe(values, maximize=False):
 
 
 def run_experiment(output, runs=20, budget=240):
+    if not _integer(runs, minimum=1) or not _integer(budget, minimum=POPULATION):
+        raise ValueError("runs must be a positive integer and budget an integer >= 24")
     output = Path(output)
     output.mkdir(parents=True, exist_ok=True)
     x, z, y, indices, mean, scale = make_data()
@@ -279,14 +339,7 @@ def run_experiment(output, runs=20, budget=240):
     # Выбор решений производится до любого обращения к тестовым целям.
     archive = nondominated(all_records)
     # Три представителя: линейный компактный, средний по сложности, лучший по validation.
-    unique_complexities = {}
-    for item in archive:
-        p = item["parameters"]
-        if p not in unique_complexities or item["validation_loss"] < unique_complexities[p]["validation_loss"]:
-            unique_complexities[p] = item
-    front = list(unique_complexities.values())
-    selected = [front[0], front[len(front) // 2], min(front, key=lambda r: r["validation_loss"])]
-    assert len({r["parameters"] for r in selected}) == 3, "need 3 distinct complexities"
+    selected = select_representatives(archive)
     json_dump(output / "selection_before_test.json", {"selection_rule": "min complexity, median archive complexity, min validation loss",
               "selected": selected, "test_used_for_selection": False})
     # Только после фиксации выбора раскрываем test и измеряем обобщение.
@@ -465,4 +518,7 @@ if __name__ == "__main__":
     args=parser.parse_args()
     if args.runs<1 or args.budget<POPULATION:
         parser.error("runs>=1 and budget>=24 required")
-    run_experiment(args.output,args.runs,args.budget)
+    try:
+        run_experiment(args.output,args.runs,args.budget)
+    except ValueError as error:
+        parser.error(str(error))

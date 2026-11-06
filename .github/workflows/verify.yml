@@ -12,6 +12,7 @@ jobs:
   verify:
     name: Тесты и сохранённые результаты
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Получить исходники
         uses: actions/checkout@v7
@@ -26,4 +27,4 @@ jobs:
       - name: Установить зависимости
         run: python -m pip install -r requirements-dev.txt
       - name: Проверить код, серии запусков и PDF
-        run: python tools/verify_bundle.py
+        run: python tools/verify_bundle.py --replay

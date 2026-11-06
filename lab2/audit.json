@@ -1,0 +1,113 @@
+{
+  "lab": 2,
+  "audit_date": "2026-11-06",
+  "passed": true,
+  "independent_saved_solution_checks": 100,
+  "configurations": 5,
+  "seeds_per_configuration": 20,
+  "independent_summary_checks": 5,
+  "history_checkpoints": 10100,
+  "examples_checked": 4,
+  "model": {
+    "shifts": 21,
+    "staff": 7,
+    "conflict_pairs": 27,
+    "maximum_soft_score": 1407,
+    "penalty": 10000
+  },
+  "replay_requested": true,
+  "replayed_runs": 100,
+  "instrumented_search_objective_calls": 600000,
+  "objective_budget_per_run": 6000,
+  "independent_statistics": {
+    "penalty_replace": {
+      "best": 47,
+      "mean": 61.85,
+      "median": 61.0,
+      "std": 7.110222440816795,
+      "worst": 73,
+      "runs": 20,
+      "feasible_rate": 1,
+      "budget": 6000,
+      "mean_feasible_evaluations": 0.103625,
+      "mean_final_feasible_population": 0.15999999999999998,
+      "mean_seconds": 0.12549270830932074,
+      "fallback_total": 0
+    },
+    "penalty_swap": {
+      "best": 44,
+      "mean": 53.65,
+      "median": 54.5,
+      "std": 5.0915306353322,
+      "worst": 63,
+      "runs": 20,
+      "feasible_rate": 1,
+      "budget": 6000,
+      "mean_feasible_evaluations": 0.127425,
+      "mean_final_feasible_population": 0.17916666666666667,
+      "mean_seconds": 0.11568786244024523,
+      "fallback_total": 0
+    },
+    "repair_replace": {
+      "best": 41,
+      "mean": 42.95,
+      "median": 43.0,
+      "std": 1.190974832912761,
+      "worst": 45,
+      "runs": 20,
+      "feasible_rate": 1,
+      "budget": 6000,
+      "mean_feasible_evaluations": 1.0,
+      "mean_final_feasible_population": 1.0,
+      "mean_seconds": 0.4398421020770911,
+      "fallback_total": 0
+    },
+    "repair_swap": {
+      "best": 41,
+      "mean": 42.9,
+      "median": 43.0,
+      "std": 1.4473205733717955,
+      "worst": 46,
+      "runs": 20,
+      "feasible_rate": 1,
+      "budget": 6000,
+      "mean_feasible_evaluations": 1.0,
+      "mean_final_feasible_population": 1.0,
+      "mean_seconds": 0.4995935895538423,
+      "fallback_total": 0
+    },
+    "random_none": {
+      "best": 66,
+      "mean": 74.65,
+      "median": 74.5,
+      "std": 3.4377930497095925,
+      "worst": 81,
+      "runs": 20,
+      "feasible_rate": 1,
+      "budget": 6000,
+      "mean_feasible_evaluations": 1.0,
+      "mean_final_feasible_population": 1.0,
+      "mean_seconds": 0.5818724895012565,
+      "fallback_total": 0
+    }
+  },
+  "exclusions": [
+    "Runtime seconds are measured, not required to replay bitwise.",
+    "One deterministic witness check at Problem construction is outside each search budget.",
+    "Repair checks constraints incrementally; their overhead is included in runtime, not objective calls."
+  ],
+  "artifact_sha256": {
+    "data.json": "7aff961530c5d7e5354431e115e3bbda8f557bfaae6c3356602849577cd0927d",
+    "config.json": "ba097762a501e9a2934b6afb37814d85e8cfdaf8f0d42ec7b810a290f5cea6cf",
+    "solutions.json": "36a5675b89a6c401f493354122a4850ccaf31b4695d9bc2dd8b47b9ad837f164",
+    "perrun.csv": "f17ca00be6b31f3494b5f08a0cfd9a145df6a9c225cedac92ff78c16ed0c883b",
+    "histories.csv": "10a7d3de4d8ab86a1cbe8f277a517d0eb0752fa784e976f34d557c122ad6171f",
+    "summary.json": "dc4a7944dd194d7be7190bb58621ca58f7f343b2059212c82dbdc96fe1181f3f",
+    "summary.csv": "efebd42e1eca4d498ff6f251027ecc2567bb8edfdef0bb23d560f2104e7587f6",
+    "examples.json": "d71a83639ccc1a5f6ad46198b3b19b5a579f9716cb913ada3b7679cf073fe079",
+    "best_solution.json": "58bd98a0efd23eb0bdb2f770356a45bdcb456d44f46efdeffe8917dbdd4e9533",
+    "best_schedule.csv": "119d16bf3c64c80f69e339eb3f38cf631dc3a8992d7e7222374ea77296ffa722",
+    "report_content.json": "ec0db8410e5de3b9486b8a1df737b1c0e55aa874ca0fec00798e357195490324"
+  },
+  "elapsed_seconds": 33.43407112499699
+}

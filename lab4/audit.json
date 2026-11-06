@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "runs_checked": 360,
+  "history_checkpoints_checked": 90000,
+  "summary_groups_checked": 12,
+  "paired_comparisons_checked": 9,
+  "best_vectors_checked": 3,
+  "replayed_runs": 360,
+  "instrumented_objective_evaluations": 10800000,
+  "max_replay_numeric_error": 0.0,
+  "replay_note": "Сравниваются все сохранённые fitness/траектории и три архивных вектора; остальные векторы исходно не сохранялись.",
+  "seconds": 10.973249499918893
+}

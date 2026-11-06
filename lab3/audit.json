@@ -1,0 +1,81 @@
+{
+  "status": "passed",
+  "lab": 3,
+  "variant": 10,
+  "track": "B",
+  "environment": {
+    "python": "3.12.14",
+    "numpy": "2.5.4"
+  },
+  "saved_runs_checked": 40,
+  "saved_history_checkpoints_checked": 9600,
+  "data_rows_checked": 480,
+  "split_sizes": {
+    "train": 280,
+    "validation": 100,
+    "test": 100
+  },
+  "scaler_train_only": true,
+  "held_out_test_excluded_from_selection": true,
+  "saved_models_independently_recomputed": 3,
+  "three_distinct_complexities": [
+    2,
+    11,
+    49
+  ],
+  "baseline_models_independently_checked": 2,
+  "evaluated_architectures_checked": 2039,
+  "archive_points_checked": 18,
+  "pareto_oracle": "independent grouped sorted scan; equal objective points retained",
+  "budgets": {
+    "candidate_calls_per_run": 240,
+    "cache_hits_counted": true,
+    "actual_trainings_total_across_runs": 3323,
+    "gradient_steps_total_across_runs": 930440,
+    "equal_candidate_calls_do_not_imply_equal_training_cost": true
+  },
+  "gradient_oracle": {
+    "architectures": [
+      "linear",
+      "tanh",
+      "relu"
+    ],
+    "steps_per_architecture": 2,
+    "finite_difference_coordinates": 54,
+    "epsilon": 1e-06,
+    "max_absolute_gradient_error": 1.1401549149248069e-10,
+    "regularized_loss_decreased_in_all_six_steps": true
+  },
+  "max_absolute_numeric_difference": 4.440892098500626e-16,
+  "replay": {
+    "performed": true,
+    "runs": 40,
+    "history_checkpoints": 9600,
+    "actual_trainings": 3323,
+    "max_absolute_metric_difference": 0.0,
+    "seconds_compared": false
+  },
+  "notes": [
+    "The audit checks the fixed archival plan, not arbitrary custom output folders.",
+    "Test content never enters search, fitness, training, archive, or representative selection.",
+    "No numerical experiment artifacts were modified by this audit."
+  ],
+  "sha256": {
+    "audit_saved.py": "bfa46cdb93c7c0ee55a89ca8689adf32ee63777a95b3e0a609d493497c0cf6f5",
+    "config.json": "110a747d8eb0489998e30e016398292391f4d3f1f70465bf0cde7707e270791d",
+    "data.csv": "f3642b528fec72e5891941f34fb7e12c7d7040fe9ab9e0aa94d3f6c8ac511f67",
+    "evaluated_architectures.csv": "58eca3c34a8afe7660ed9d1e900e986a2891a74c9436e71e2168b45dc2fe5310",
+    "history.csv": "41196d487183e3344cc2c0c7d033eb24e89ba91eab6e7108e4e987682eff2f21",
+    "lab3.py": "1d71b44e47b9b0694781d33c34be1d13bfcbb41b91969ff7d0059df0b5dd0c4a",
+    "model_1.npz": "61138615ad39ef4749ffc75c5432becbd28c8c2c49900c1018394d32634c64df",
+    "model_2.npz": "9912ec35b5c2998804fd4cf365e0f19f7f919daeb2b23619693e4b25392808a2",
+    "model_3.npz": "e2584b95425527c9c199eb83de9c957d96d6901d2f7747f057bc27114c1f5fcf",
+    "pareto_archive.csv": "c1e1b222926fd03eec7e7cabf52ba2cda58794b7003c5df99f6cfbcaafd83de3",
+    "report_content.json": "7e726ca355de940466ad0f1cb96ef51229da89083334cadeccfcdb3a82cf559d",
+    "representatives.csv": "769dd2dcfbec4caf744a47a8713c81f36cdf2ceab20f059f9f3cad18bb0c42e7",
+    "results.json": "fb42e186849e549c869d9f2851a4eac5a20d62b629cae5f4906992331cff1897",
+    "runs.csv": "a2c7dfdab1b3fde8ee577b7bffb8816fc9ace3e5e19377a11a3293181a9f458e",
+    "selection_before_test.json": "400101756354d2e0860d787c208c5218cf4dedcfb114e2d1459b2a9cfbae2680",
+    "test_lab3.py": "bfa019eb6c229b49c4c1ec1d3b689f230040467ada779287a43950f141c13751"
+  }
+}

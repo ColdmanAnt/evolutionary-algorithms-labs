@@ -4,6 +4,7 @@ import argparse
 import json
 import re
 import html
+import hashlib
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image, KeepTogether
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -45,8 +46,9 @@ def build(lab):
     story=[Paragraph('НИЯУ МИФИ · Эволюционное программирование и генетические алгоритмы',styles['SmallRu']),
            Spacer(1,7*mm),Paragraph(safe(data['title']),styles['TitleRu']),
            Paragraph(safe(data.get('task','')),styles['TextRu']),
-           Paragraph('Холодков Антон Евгеньевич<br/>Группа 517 · N = 28 · Q = 1 · Y = 26 · V = 10<br/>5 ноября 2026 года',styles['TextRu']),
+           Paragraph('Холодков Антон Евгеньевич<br/>Группа 517 · N = 28 · Q = 1 · Y = 26 · V = 10<br/>6 ноября 2026 года',styles['TextRu']),
            Spacer(1,3*mm)]
+    asset_hashes={}
     for section in data['sections']:
         story.append(Paragraph(safe(section['heading']),styles['HeadingRu']))
         for p in section.get('paragraphs',[]):story.append(Paragraph(safe(p),styles['TextRu']))
@@ -73,6 +75,7 @@ def build(lab):
             if not imagepath.exists():
                 imagepath=ROOT/f'lab{lab}'/section['image']
             if not imagepath.exists():raise FileNotFoundError(imagepath)
+            asset_hashes[section['image']]=hashlib.sha256(imagepath.read_bytes()).hexdigest()
             from PIL import Image as PILImage
             with PILImage.open(imagepath) as im:w,h=im.size
             factor=min(doc.width/w,108*mm/h)
@@ -86,6 +89,16 @@ def build(lab):
         canvas.drawString(doc.leftMargin,10*mm,f'Холодков А. Е. · 517 · ЛР{lab} · Вариант 10')
         canvas.drawRightString(A4[0]-doc.rightMargin,10*mm,str(doc.page));canvas.restoreState()
     doc.build(story,onFirstPage=footer,onLaterPages=footer)
+    # Связать PDF с точным JSON и рисунками, чтобы проверки ловили устаревший отчёт.
+    original=PdfReader(target)
+    sealed=PdfWriter()
+    sealed.append(original)
+    sealed.add_metadata({str(k):str(v) for k,v in (original.metadata or {}).items()})
+    sealed.add_metadata({
+        '/ReportContentSHA256':hashlib.sha256(source.read_bytes()).hexdigest(),
+        '/ReportAssetsSHA256':hashlib.sha256(json.dumps(asset_hashes,sort_keys=True,ensure_ascii=False).encode()).hexdigest(),
+    })
+    sealed.write(target)
     return target
 
 def main():
@@ -94,6 +107,8 @@ def main():
     writer=PdfWriter()
     for i,p in enumerate(pdfs,1):writer.append(str(p),outline_item=f'Лабораторная работа № {i}')
     writer.add_metadata({'/Title':'Все лабораторные работы. Вариант 10','/Author':'Холодков Антон Евгеньевич'})
+    writer.add_metadata({'/SourceReportsSHA256':hashlib.sha256(json.dumps(
+        [hashlib.sha256(p.read_bytes()).hexdigest() for p in pdfs]).encode()).hexdigest()})
     writer.write(ROOT/'all_reports.pdf')
     for p in pdfs+[ROOT/'all_reports.pdf']:print(p,len(PdfReader(p).pages),'pages')
 
