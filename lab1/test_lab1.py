@@ -246,4 +246,61 @@ class Lab1Tests(unittest.TestCase):
                 with self.assertRaises(AssertionError):
                     compare_replay(result,saved,history,expected_budget=160,saved_vector=[1.,2.])
 
+    def test_portable_replay_reports_divergence_and_rejects_invalid_data(self):
+        from audit_saved import compare_replay
+        saved=dict(seed='100',best='-8.0',evaluations='160',generations='1')
+        history=[(0,80,-3.),(1,160,-8.)]
+        different=dict(seed=100,best=-7.999,evaluations=160,generations=1,feasible=True,
+                       history=[(0,80,-3.),(1,160,-7.999)],x=[1.001,2.])
+        comparison=compare_replay(different,saved,history,expected_budget=160,
+                                  saved_vector=[1.,2.],enforce_archive=False)
+        self.assertFalse(comparison['archive_equivalent'])
+        self.assertEqual(comparison['exact_final_fitness_matches'],0)
+        self.assertEqual(comparison['final_fitness_matches_within_tolerance'],0)
+        self.assertEqual(comparison['history_checkpoints_within_tolerance'],1)
+        self.assertEqual(comparison['saved_global_best_vector_matches_within_tolerance'],0)
+        self.assertEqual(comparison['first_outside_tolerance_checkpoint']['generation'],1)
+        self.assertGreater(comparison['max_absolute_final_fitness_error'],.0009)
+        with self.assertRaises(AssertionError):
+            compare_replay(different,saved,history,expected_budget=160,saved_vector=[1.,2.])
+        for change in [dict(seed=101),dict(evaluations=159),dict(generations=2),
+                       dict(history=[(0,80,-3.)]),dict(history=[(0,80,-3.),(1,159,-7.999)]),
+                       dict(best=float('nan')),dict(x=[float('nan'),2.]),
+                       dict(history=[(0,80,float('nan')),(1,160,-7.999)]),
+                       dict(history=[(0,80,-9.),(1,160,-7.999)])]:
+            with self.subTest(change=change),self.assertRaises(AssertionError):
+                invalid=deepcopy(different);invalid.update(change)
+                compare_replay(invalid,saved,history,expected_budget=160,enforce_archive=False)
+
+    def test_same_machine_double_replay_is_exact_and_ignores_time(self):
+        from audit_saved import verify_same_machine
+        first=dict(seed=100,best=-8.,evaluations=160,generations=1,feasible=True,
+                   history=[(0,80,-3.),(1,160,-8.)],x=[1.,2.],seconds=1.)
+        second=deepcopy(first);second['seconds']=5.
+        result=verify_same_machine(first,second)
+        self.assertEqual(result['exact_final_fitness_matches'],1)
+        self.assertEqual(result['exact_history_matches'],1)
+        self.assertEqual(result['exact_vector_matches'],1)
+        for change in [dict(best=math.nextafter(-8.,0.)),dict(x=[math.nextafter(1.,2.),2.]),
+                       dict(history=[(0,80,math.nextafter(-3.,0.)),(1,160,-8.)]),dict(evaluations=159)]:
+            with self.subTest(change=change),self.assertRaises(AssertionError):
+                invalid=deepcopy(second);invalid.update(change)
+                verify_same_machine(first,invalid)
+
+    def test_predeclared_mean_regression_guard_accepts_and_rejects_changes(self):
+        import statistics
+        from audit_saved import aggregate_regression_guard
+        archived=[-8.+.01*i for i in range(20)]
+        limit=max(1e-9,3*statistics.stdev(archived)/math.sqrt(20))
+        accepted=aggregate_regression_guard(archived,[x+limit/2 for x in archived],algorithm='test')
+        self.assertEqual(accepted['limit'],limit)
+        self.assertTrue(accepted['passed'])
+        self.assertFalse(accepted['statistical_equivalence_proven'])
+        with self.assertRaisesRegex(AssertionError,'abs_delta=.*limit='):
+            aggregate_regression_guard(archived,[x+2*limit for x in archived],algorithm='test')
+        constant=[-8.]*20
+        self.assertEqual(aggregate_regression_guard(constant,constant,algorithm='test')['limit'],1e-9)
+        for invalid in [[-8.]*19,[-8.]*19+[float('nan')],[-7.99]*20]:
+            with self.assertRaises(AssertionError):aggregate_regression_guard(constant,invalid,algorithm='test')
+
 if __name__=='__main__':unittest.main()

@@ -1,4 +1,5 @@
 import json
+import copy
 import unittest
 import math
 from pathlib import Path
@@ -6,6 +7,7 @@ from tempfile import TemporaryDirectory
 from unittest.mock import patch
 import numpy as np
 import main as lab4
+from audit_saved import mean_drift_guard, same_environment_match
 from main import HERE, evaluate, reflect, run, migrate, validate_config, offspring, experiment
 
 
@@ -177,6 +179,102 @@ class Invariants(unittest.TestCase):
                 with (root/'runs.csv').open('w',newline='') as f:
                     writer=csv.DictWriter(f,fieldnames=damaged[0]);writer.writeheader();writer.writerows(damaged)
                 with self.assertRaises(ValueError):verify_saved(root=root)
+
+
+class AuditHelpers(unittest.TestCase):
+    def test_mean_guard_uses_archive_sample_standard_error(self):
+        # Для сбалансированной серии +/-1 сумма квадратов равна n:
+        # 3 * sample_std / sqrt(n) = 3 / sqrt(n-1).
+        for n in [2, 8, 30]:
+            reference=np.array([-1.,1.]*(n//2))
+            result=mean_drift_guard(reference,np.zeros(n))
+            self.assertAlmostEqual(result['threshold'],3/math.sqrt(n-1),places=14)
+            self.assertEqual(result['mean_delta'],0.)
+            self.assertIn('not proof',result['interpretation'])
+
+    def test_mean_guard_accepts_boundary_and_rejects_next_float_beyond(self):
+        reference=np.array([-1.,1.])
+        # Здесь фиксированный порог равен ровно 3, без оценки по повторной серии.
+        for sign in (-1.,1.):
+            with self.subTest(sign=sign):
+                accepted=mean_drift_guard(reference,np.full(2,sign*3.))
+                self.assertEqual(accepted['threshold'],3.)
+                self.assertEqual(accepted['mean_delta'],sign*3.)
+                outside=np.nextafter(sign*3.,sign*np.inf)
+                with self.assertRaisesRegex(ValueError,'дрейф среднего'):
+                    mean_drift_guard(reference,np.full(2,outside))
+
+    def test_mean_guard_cannot_expand_threshold_using_repeat_variance(self):
+        reference=np.array([-1.,1.])
+        changed_variance=mean_drift_guard(reference,np.array([-1e9,1e9]))
+        self.assertEqual(changed_variance['threshold'],3.)
+        self.assertEqual(changed_variance['mean_delta'],0.)
+        for repeated in [np.full(2,4.),np.array([-1e9+4.,1e9+4.])]:
+            with self.assertRaises(ValueError):mean_drift_guard(reference,repeated)
+
+    def test_mean_guard_zero_variance_and_singleton_use_fixed_floor(self):
+        for reference in [np.zeros(2),np.zeros(1)]:
+            for sign in (-1.,1.):
+                accepted=mean_drift_guard(reference,np.full_like(reference,sign*1e-11))
+                self.assertEqual(accepted['threshold'],1e-11)
+                self.assertEqual(accepted['archive']['std'],0.)
+                outside=np.nextafter(sign*1e-11,sign*np.inf)
+                with self.assertRaises(ValueError):
+                    mean_drift_guard(reference,np.full_like(reference,outside))
+
+    def test_mean_guard_rejects_invalid_shapes_and_nonfinite_series(self):
+        for reference,repeated in [([],[]),([1.],[1.,2.]),([[1.,2.]],[[1.,2.]]),
+                                   (1.,1.),([1.],[[1.]])]:
+            with self.subTest(reference=reference,repeated=repeated):
+                with self.assertRaises(ValueError):mean_drift_guard(reference,repeated)
+        for value in [np.nan,np.inf,-np.inf]:
+            for reference,repeated in [([0.,value],[0.,0.]),([0.,0.],[0.,value])]:
+                with self.subTest(value=value,reference=reference,repeated=repeated):
+                    with self.assertRaisesRegex(ValueError,'неконечная серия'):
+                        mean_drift_guard(reference,repeated)
+
+    @staticmethod
+    def sample_repeat():
+        result=dict(function='sphere',method='ring',seed=7,solution=[.25,-.5],best=.3125,
+                    evaluations=240,generations=1,migration_slots=0,diversity=.125,seconds=.01)
+        history=[dict(generation=0,evaluations=120,best=1.,diversity=.25),
+                 dict(generation=1,evaluations=240,best=.3125,diversity=.125)]
+        return result,history
+
+    def test_same_environment_match_ignores_elapsed_seconds_only(self):
+        first,history=self.sample_repeat()
+        second,second_history=copy.deepcopy(first),copy.deepcopy(history)
+        second['seconds']=1000.
+        same_environment_match(first,history,second,second_history)
+        # Пропуск seconds также допустим: счётчик времени не часть результата поиска.
+        del second['seconds']
+        same_environment_match(first,history,second,second_history)
+
+    def test_same_environment_match_requires_exact_metrics_and_discrete_metadata(self):
+        first,history=self.sample_repeat()
+        changes={'function':'rastrigin','method':'isolated','seed':8,
+                 'solution':[np.nextafter(.25,np.inf),-.5],
+                 'best':np.nextafter(first['best'],np.inf),'evaluations':241,
+                 'generations':2,'migration_slots':1,
+                 'diversity':np.nextafter(first['diversity'],np.inf)}
+        for field,value in changes.items():
+            with self.subTest(field=field):
+                second=copy.deepcopy(first);second[field]=value
+                with self.assertRaisesRegex(ValueError,field):
+                    same_environment_match(first,history,second,copy.deepcopy(history))
+
+    def test_same_environment_match_requires_exact_complete_history(self):
+        first,history=self.sample_repeat()
+        for field,value in [('generation',2),('evaluations',241),
+                            ('best',np.nextafter(.3125,np.inf)),
+                            ('diversity',np.nextafter(.125,np.inf))]:
+            with self.subTest(field=field):
+                changed=copy.deepcopy(history);changed[-1][field]=value
+                with self.assertRaisesRegex(ValueError,'история'):
+                    same_environment_match(first,history,copy.deepcopy(first),changed)
+        for changed in [history[:-1],list(reversed(history))]:
+            with self.assertRaisesRegex(ValueError,'история'):
+                same_environment_match(first,history,copy.deepcopy(first),changed)
 
 
 if __name__=='__main__':unittest.main()

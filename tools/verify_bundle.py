@@ -197,7 +197,8 @@ def execute(command,label):
     return run
 
 
-def run_checks(root,replay=False):
+def run_checks(root,replay=False,strict_archive=False):
+    replay=bool(replay or strict_archive)
     variant=validate_variant(root)
     tests=[]
     for directory in ['lab1','lab2','lab3','lab4','tools']:
@@ -210,6 +211,7 @@ def run_checks(root,replay=False):
     for lab in range(1,5):
         command=[sys.executable,str(root/f'lab{lab}'/'audit_saved.py')]
         if replay:command.append('--replay')
+        if strict_archive and lab in (1,4):command.append('--strict-archive')
         run=execute(command,f'Глубокая проверка ЛР{lab}')
         evidence=json.loads(run.stdout)
         require(evidence and evidence.get('status','passed')=='passed' and evidence.get('passed',True) is True,f'ЛР{lab}: аудит не подтвердил успех')
@@ -227,13 +229,15 @@ def run_checks(root,replay=False):
             if p.is_file() and '__pycache__' not in p.parts and p.name!='audit.json':
                 fingerprints[p.relative_to(root).as_posix()]=canonical_file_digest(p)
     for relative in ['variant.json','requirements.txt','requirements-dev.txt','.python-version',
-                     '.github/workflows/verify.yml','README.md','all_reports.pdf']:
+                     '.github/workflows/verify.yml','README.md','all_reports.pdf','reference_environment.json']:
         fingerprints[relative]=canonical_file_digest(root/relative)
     # В проектном протоколе используется московское время UTC+3; не требует
     # внешней базы IANA/tzdata в стандартной установке Python на Windows.
     now=datetime.now(timezone(timedelta(hours=3),name='Europe/Moscow'))
     return dict(author=variant['author'],group=517,N=variant['N'],Q=variant['Q'],Y=variant['Y'],variant=variant['V'],
-                date=now.date().isoformat(),checked_at=now.isoformat(),audit_mode='full_replay' if replay else 'saved_integrity',
+                date=now.date().isoformat(),checked_at=now.isoformat(),
+                audit_mode='strict_archive_replay' if strict_archive else ('portable_replay' if replay else 'saved_integrity'),
+                archive_provenance=json.loads((root/'reference_environment.json').read_text(encoding='utf-8')),
                 environment=dict(python=platform.python_version(),system=platform.system(),machine=platform.machine(),
                                  **{k:importlib.metadata.version(k) for k in ['numpy','matplotlib','reportlab','pypdf']}),
                 series=series,total_runs=sum(s['runs'] for s in series),unit_tests_passed=sum(t['passed'] for t in tests),unit_tests=tests,
@@ -243,6 +247,8 @@ def run_checks(root,replay=False):
                 notes=['Исходные времена запусков сохранены; повторные сравнения исключают wall time.',
                        'ЛР3: равны бюджеты вызовов fitness; фактические обучения и градиентные шаги учитываются отдельно.',
                        'Все560 запусков повторяются только с --replay; быстрый режим проверяет сохранённые данные и модели.',
+                       'ЛР1/ЛР4: --replay требует точного двойного повтора в текущей среде и фиксированного контроля дрейфа среднего; расхождения с архивом записываются отдельно. Это не доказательство статистической эквивалентности.',
+                       '--strict-archive дополнительно требует совпадения архивных траекторий в объявленных малых численных допусках; межплатформенное совпадение не предполагается.',
                        'Отсутствующие исходные векторы ЛР1/ЛР4 нельзя сравнить задним числом: проверяются сохранённые рекорды, все fitness/истории и допустимость вновь полученных векторов.',
                        'ТрекB, согласование проектаЛР4 и успешная защита не являются утверждением о выполненных процедурах преподавателя.'])
 
@@ -250,9 +256,10 @@ def run_checks(root,replay=False):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--replay',action='store_true',help='Повторить все560 записанных запусков, не меняя исходные результаты')
+    parser.add_argument('--strict-archive',action='store_true',help='Повторить серии и требовать совпадения с архивными траекториями')
     parser.add_argument('--output',type=Path,default=ROOT/'verification.json',help='Путь протокола проверки')
     args=parser.parse_args()
-    result=run_checks(ROOT,args.replay)
+    result=run_checks(ROOT,args.replay,args.strict_archive)
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     print(json.dumps({k:result[k] for k in ['variant','audit_mode','total_runs','unit_tests_passed','combined_pdf_pages']},ensure_ascii=False))

@@ -1,0 +1,18 @@
+{
+  "archive_commit": "557ee876c88ad256cf95f4deecc688912cfbc802",
+  "archive_date": "2026-11-05",
+  "recorded_environment": {
+    "python": "3.12.14",
+    "system": "Darwin",
+    "machine": "arm64",
+    "numpy": "2.5.4",
+    "matplotlib": "3.11.2"
+  },
+  "unrecorded_details": [
+    "OS patch version",
+    "CPU model",
+    "NumPy build configuration and math/BLAS libraries"
+  ],
+  "note": "Historical provenance copied from the original committed protocol; subsequent verification.json files describe the machine executing that audit. Identical listed versions alone do not establish identical floating-point trajectories.",
+  "numpy_compatibility_policy": "https://numpy.org/doc/stable/reference/random/compatibility.html"
+}
