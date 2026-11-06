@@ -3,6 +3,7 @@ from unittest.mock import patch
 from pathlib import Path
 import shutil
 import tempfile
+import csv
 import numpy as np
 from lab3 import (Gene, WIDTHS, EPOCHS, accuracy, crossover, fit_scaler, make_data,
                   mutate, nondominated, predict_logits, random_gene, search,
@@ -154,6 +155,23 @@ class TestLab3(unittest.TestCase):
             np.savez(copied/'model_1.npz',**weights)
             with self.assertRaisesRegex(ValueError,'model_1.npz: validation_loss'):
                 verify_saved(directory=copied)
+
+    def test_generated_features_allow_ulp_noise_but_reject_changed_data(self):
+        root=Path(__file__).resolve().parent
+        with tempfile.TemporaryDirectory(prefix='.audit-test-',dir=root) as temporary:
+            copied=Path(temporary)/'bundle'
+            shutil.copytree(root,copied,ignore=shutil.ignore_patterns('.audit-test-*','__pycache__'))
+            data=copied/'data.csv'
+            with data.open(encoding='utf-8-sig',newline='') as stream:rows=list(csv.DictReader(stream))
+            original=float(rows[0]['x1'])
+            def save(value):
+                rows[0]['x1']=str(value)
+                with data.open('w',encoding='utf-8-sig',newline='') as stream:
+                    writer=csv.DictWriter(stream,fieldnames=rows[0]);writer.writeheader();writer.writerows(rows)
+            save(np.nextafter(original,np.inf))
+            self.assertEqual(verify_saved(directory=copied)['status'],'passed')
+            save(original+1e-4)
+            with self.assertRaisesRegex(ValueError,'generated feature values'):verify_saved(directory=copied)
 
 if __name__=='__main__':
     unittest.main()

@@ -6,7 +6,7 @@
   "Y": 26,
   "variant": 10,
   "date": "2026-11-06",
-  "checked_at": "2026-11-06T15:21:58.541856+03:00",
+  "checked_at": "2026-11-06T15:34:01.886581+03:00",
   "audit_mode": "full_replay",
   "environment": {
     "python": "3.12.14",
@@ -52,38 +52,38 @@
     }
   ],
   "total_runs": 560,
-  "unit_tests_passed": 74,
+  "unit_tests_passed": 77,
   "unit_tests": [
     {
       "suite": "lab1",
-      "passed": 16,
-      "log": "test_archive_config_mismatches_fail_before_writing (test_lab1.Lab1Tests.test_archive_config_mismatches_fail_before_writing) ... ok\ntest_cli_rejects_ignored_and_nonfinite_options (test_lab1.Lab1Tests.test_cli_rejects_ignored_and_nonfinite_options) ... ok\ntest_counted_objective_rows_equal_budget_at_boundaries (test_lab1.Lab1Tests.test_counted_objective_rows_equal_budget_at_boundaries) ... ok\ntest_function_values_and_bounds (test_lab1.Lab1Tests.test_function_values_and_bounds) ... ok\ntest_gaussian_mutation_only_changes_masked_coordinates (test_lab1.Lab1Tests.test_gaussian_mutation_only_changes_masked_coordinates) ... ok\ntest_invalid_parameters (test_lab1.Lab1Tests.test_invalid_parameters) ... ok\ntest_nonfinite_fractional_and_boolean_parameters_rejected (test_lab1.Lab1Tests.test_nonfinite_fractional_and_boolean_parameters_rejected) ... ok\ntest_objective_matches_independent_scalar_oracle (test_lab1.Lab1Tests.test_objective_matches_independent_scalar_oracle) ... ok\ntest_random_budget_and_reproduction (test_lab1.Lab1Tests.test_random_budget_and_reproduction) ... ok\ntest_reflection_multiple_periods (test_lab1.Lab1Tests.test_reflection_multiple_periods) ... ok\ntest_report_output_isolation_and_default_paths (test_lab1.Lab1Tests.test_report_output_isolation_and_default_paths) ... ok\ntest_reproducibility_budget_elitism (test_lab1.Lab1Tests.test_reproducibility_budget_elitism) ... ok\ntest_saved_audit_detects_corrupted_numeric_artifacts (test_lab1.Lab1Tests.test_saved_audit_detects_corrupted_numeric_artifacts) ... ok\ntest_sbx_identity_at_no_crossing (test_lab1.Lab1Tests.test_sbx_identity_at_no_crossing) ... ok\ntest_sbx_known_quantiles_symmetry_and_parent_integrity (test_lab1.Lab1Tests.test_sbx_known_quantiles_symmetry_and_parent_integrity) ... ok\ntest_tournament_selects_minimum_and_copies_winners (test_lab1.Lab1Tests.test_tournament_selects_minimum_and_copies_winners) ... ok\n\n----------------------------------------------------------------------\nRan 16 tests in 0.269s\n\nOK\n"
+      "passed": 18,
+      "log": "test_archive_config_mismatches_fail_before_writing (test_lab1.Lab1Tests.test_archive_config_mismatches_fail_before_writing) ... ok\ntest_cli_rejects_ignored_and_nonfinite_options (test_lab1.Lab1Tests.test_cli_rejects_ignored_and_nonfinite_options) ... ok\ntest_counted_objective_rows_equal_budget_at_boundaries (test_lab1.Lab1Tests.test_counted_objective_rows_equal_budget_at_boundaries) ... ok\ntest_function_values_and_bounds (test_lab1.Lab1Tests.test_function_values_and_bounds) ... ok\ntest_gaussian_mutation_only_changes_masked_coordinates (test_lab1.Lab1Tests.test_gaussian_mutation_only_changes_masked_coordinates) ... ok\ntest_invalid_parameters (test_lab1.Lab1Tests.test_invalid_parameters) ... ok\ntest_nonfinite_fractional_and_boolean_parameters_rejected (test_lab1.Lab1Tests.test_nonfinite_fractional_and_boolean_parameters_rejected) ... ok\ntest_objective_matches_independent_scalar_oracle (test_lab1.Lab1Tests.test_objective_matches_independent_scalar_oracle) ... ok\ntest_random_budget_and_reproduction (test_lab1.Lab1Tests.test_random_budget_and_reproduction) ... ok\ntest_reflection_multiple_periods (test_lab1.Lab1Tests.test_reflection_multiple_periods) ... ok\ntest_replay_float_tolerance_counts_exact_and_ulp_matches_honestly (test_lab1.Lab1Tests.test_replay_float_tolerance_counts_exact_and_ulp_matches_honestly) ... ok\ntest_replay_tolerance_rejects_material_and_discrete_changes (test_lab1.Lab1Tests.test_replay_tolerance_rejects_material_and_discrete_changes) ... ok\ntest_report_output_isolation_and_default_paths (test_lab1.Lab1Tests.test_report_output_isolation_and_default_paths) ... ok\ntest_reproducibility_budget_elitism (test_lab1.Lab1Tests.test_reproducibility_budget_elitism) ... ok\ntest_saved_audit_detects_corrupted_numeric_artifacts (test_lab1.Lab1Tests.test_saved_audit_detects_corrupted_numeric_artifacts) ... ok\ntest_sbx_identity_at_no_crossing (test_lab1.Lab1Tests.test_sbx_identity_at_no_crossing) ... ok\ntest_sbx_known_quantiles_symmetry_and_parent_integrity (test_lab1.Lab1Tests.test_sbx_known_quantiles_symmetry_and_parent_integrity) ... ok\ntest_tournament_selects_minimum_and_copies_winners (test_lab1.Lab1Tests.test_tournament_selects_minimum_and_copies_winners) ... ok\n\n----------------------------------------------------------------------\nRan 18 tests in 0.263s\n\nOK\n"
     },
     {
       "suite": "lab2",
       "passed": 20,
-      "log": "test_bad_plan_detected (test_lab2.ScheduleTests.test_bad_plan_detected) ... ok\ntest_caller_data_mutation_cannot_invalidate_loaded_witness (test_lab2.ScheduleTests.test_caller_data_mutation_cannot_invalidate_loaded_witness) ... ok\ntest_cli_invalid_input_has_argparse_error_without_traceback (test_lab2.ScheduleTests.test_cli_invalid_input_has_argparse_error_without_traceback) ... ok\ntest_exact_instrumented_budget_at_generation_boundaries (test_lab2.ScheduleTests.test_exact_instrumented_budget_at_generation_boundaries) ... ok\ntest_independent_oracle_for_1000_random_and_extreme_vectors (test_lab2.ScheduleTests.test_independent_oracle_for_1000_random_and_extreme_vectors) ... ok\ntest_infeasible_or_malformed_data_rejected (test_lab2.ScheduleTests.test_infeasible_or_malformed_data_rejected) ... ok\ntest_invalid_experiment_never_writes_partial_output (test_lab2.ScheduleTests.test_invalid_experiment_never_writes_partial_output) ... ok\ntest_invalid_methods_operators_and_numeric_parameters_fail_early (test_lab2.ScheduleTests.test_invalid_methods_operators_and_numeric_parameters_fail_early) ... ok\ntest_no_silent_fractional_or_string_genotype_coercion (test_lab2.ScheduleTests.test_no_silent_fractional_or_string_genotype_coercion) ... ok\ntest_penalty_bound_and_feasible_ordering (test_lab2.ScheduleTests.test_penalty_bound_and_feasible_ordering) ... ok\ntest_repair_100_random_inputs (test_lab2.ScheduleTests.test_repair_100_random_inputs) ... ok\ntest_repair_finite_fallback_is_independently_feasible_and_copied (test_lab2.ScheduleTests.test_repair_finite_fallback_is_independently_feasible_and_copied) ... ok\ntest_repair_properties_across_generated_instances (test_lab2.ScheduleTests.test_repair_properties_across_generated_instances) ... ok\ntest_reproducibility_and_exact_partial_budget (test_lab2.ScheduleTests.test_reproducibility_and_exact_partial_budget) ... ok\ntest_saved_independent_audit_and_corruption_detection (test_lab2.ScheduleTests.test_saved_independent_audit_and_corruption_detection) ... ok\ntest_size_and_conflicts (test_lab2.ScheduleTests.test_size_and_conflicts) ... ok\ntest_swap_preserves_counts_without_crossover (test_lab2.ScheduleTests.test_swap_preserves_counts_without_crossover) ... ok\ntest_validation (test_lab2.ScheduleTests.test_validation) ... ok\ntest_variation_preserves_alphabet_and_never_mutates_parents (test_lab2.ScheduleTests.test_variation_preserves_alphabet_and_never_mutates_parents) ... ok\ntest_witness_rejected_even_under_python_optimized_mode (test_lab2.ScheduleTests.test_witness_rejected_even_under_python_optimized_mode) ... ok\n\n----------------------------------------------------------------------\nRan 20 tests in 0.656s\n\nOK\n"
+      "log": "test_bad_plan_detected (test_lab2.ScheduleTests.test_bad_plan_detected) ... ok\ntest_caller_data_mutation_cannot_invalidate_loaded_witness (test_lab2.ScheduleTests.test_caller_data_mutation_cannot_invalidate_loaded_witness) ... ok\ntest_cli_invalid_input_has_argparse_error_without_traceback (test_lab2.ScheduleTests.test_cli_invalid_input_has_argparse_error_without_traceback) ... ok\ntest_exact_instrumented_budget_at_generation_boundaries (test_lab2.ScheduleTests.test_exact_instrumented_budget_at_generation_boundaries) ... ok\ntest_independent_oracle_for_1000_random_and_extreme_vectors (test_lab2.ScheduleTests.test_independent_oracle_for_1000_random_and_extreme_vectors) ... ok\ntest_infeasible_or_malformed_data_rejected (test_lab2.ScheduleTests.test_infeasible_or_malformed_data_rejected) ... ok\ntest_invalid_experiment_never_writes_partial_output (test_lab2.ScheduleTests.test_invalid_experiment_never_writes_partial_output) ... ok\ntest_invalid_methods_operators_and_numeric_parameters_fail_early (test_lab2.ScheduleTests.test_invalid_methods_operators_and_numeric_parameters_fail_early) ... ok\ntest_no_silent_fractional_or_string_genotype_coercion (test_lab2.ScheduleTests.test_no_silent_fractional_or_string_genotype_coercion) ... ok\ntest_penalty_bound_and_feasible_ordering (test_lab2.ScheduleTests.test_penalty_bound_and_feasible_ordering) ... ok\ntest_repair_100_random_inputs (test_lab2.ScheduleTests.test_repair_100_random_inputs) ... ok\ntest_repair_finite_fallback_is_independently_feasible_and_copied (test_lab2.ScheduleTests.test_repair_finite_fallback_is_independently_feasible_and_copied) ... ok\ntest_repair_properties_across_generated_instances (test_lab2.ScheduleTests.test_repair_properties_across_generated_instances) ... ok\ntest_reproducibility_and_exact_partial_budget (test_lab2.ScheduleTests.test_reproducibility_and_exact_partial_budget) ... ok\ntest_saved_independent_audit_and_corruption_detection (test_lab2.ScheduleTests.test_saved_independent_audit_and_corruption_detection) ... ok\ntest_size_and_conflicts (test_lab2.ScheduleTests.test_size_and_conflicts) ... ok\ntest_swap_preserves_counts_without_crossover (test_lab2.ScheduleTests.test_swap_preserves_counts_without_crossover) ... ok\ntest_validation (test_lab2.ScheduleTests.test_validation) ... ok\ntest_variation_preserves_alphabet_and_never_mutates_parents (test_lab2.ScheduleTests.test_variation_preserves_alphabet_and_never_mutates_parents) ... ok\ntest_witness_rejected_even_under_python_optimized_mode (test_lab2.ScheduleTests.test_witness_rejected_even_under_python_optimized_mode) ... ok\n\n----------------------------------------------------------------------\nRan 20 tests in 0.650s\n\nOK\n"
     },
     {
       "suite": "lab3",
-      "passed": 14,
-      "log": "test_all_architecture_parameter_counts (test_lab3.TestLab3.test_all_architecture_parameter_counts) ... ok\ntest_archive_matches_pairwise_oracle_with_ties_and_permutations (test_lab3.TestLab3.test_archive_matches_pairwise_oracle_with_ties_and_permutations) ... ok\ntest_cache_counts_candidate_calls_and_actual_trainings_separately (test_lab3.TestLab3.test_cache_counts_candidate_calls_and_actual_trainings_separately) ... ok\ntest_invalid_genes_and_training_inputs_raise_value_error (test_lab3.TestLab3.test_invalid_genes_and_training_inputs_raise_value_error) ... ok\ntest_invalid_search_inputs_and_disjoint_split_validation (test_lab3.TestLab3.test_invalid_search_inputs_and_disjoint_split_validation) ... ok\ntest_nondomination (test_lab3.TestLab3.test_nondomination) ... ok\ntest_representative_selection_is_independent_of_test_scores (test_lab3.TestLab3.test_representative_selection_is_independent_of_test_scores) ... ok\ntest_saved_model_corruption_is_detected (test_lab3.TestLab3.test_saved_model_corruption_is_detected) ... ok\ntest_scaler_and_split_leakage (test_lab3.TestLab3.test_scaler_and_split_leakage) ... ok\ntest_search_budget_reproducibility (test_lab3.TestLab3.test_search_budget_reproducibility) ... ok\ntest_search_is_independent_of_test_features_and_labels (test_lab3.TestLab3.test_search_is_independent_of_test_features_and_labels) ... ok\ntest_training_gradients_by_independent_finite_differences (test_lab3.TestLab3.test_training_gradients_by_independent_finite_differences) ... ok\ntest_training_reproducibility (test_lab3.TestLab3.test_training_reproducibility) ... ok\ntest_variation_syntax (test_lab3.TestLab3.test_variation_syntax) ... ok\n\n----------------------------------------------------------------------\nRan 14 tests in 0.332s\n\nOK\n"
+      "passed": 15,
+      "log": "test_all_architecture_parameter_counts (test_lab3.TestLab3.test_all_architecture_parameter_counts) ... ok\ntest_archive_matches_pairwise_oracle_with_ties_and_permutations (test_lab3.TestLab3.test_archive_matches_pairwise_oracle_with_ties_and_permutations) ... ok\ntest_cache_counts_candidate_calls_and_actual_trainings_separately (test_lab3.TestLab3.test_cache_counts_candidate_calls_and_actual_trainings_separately) ... ok\ntest_generated_features_allow_ulp_noise_but_reject_changed_data (test_lab3.TestLab3.test_generated_features_allow_ulp_noise_but_reject_changed_data) ... ok\ntest_invalid_genes_and_training_inputs_raise_value_error (test_lab3.TestLab3.test_invalid_genes_and_training_inputs_raise_value_error) ... ok\ntest_invalid_search_inputs_and_disjoint_split_validation (test_lab3.TestLab3.test_invalid_search_inputs_and_disjoint_split_validation) ... ok\ntest_nondomination (test_lab3.TestLab3.test_nondomination) ... ok\ntest_representative_selection_is_independent_of_test_scores (test_lab3.TestLab3.test_representative_selection_is_independent_of_test_scores) ... ok\ntest_saved_model_corruption_is_detected (test_lab3.TestLab3.test_saved_model_corruption_is_detected) ... ok\ntest_scaler_and_split_leakage (test_lab3.TestLab3.test_scaler_and_split_leakage) ... ok\ntest_search_budget_reproducibility (test_lab3.TestLab3.test_search_budget_reproducibility) ... ok\ntest_search_is_independent_of_test_features_and_labels (test_lab3.TestLab3.test_search_is_independent_of_test_features_and_labels) ... ok\ntest_training_gradients_by_independent_finite_differences (test_lab3.TestLab3.test_training_gradients_by_independent_finite_differences) ... ok\ntest_training_reproducibility (test_lab3.TestLab3.test_training_reproducibility) ... ok\ntest_variation_syntax (test_lab3.TestLab3.test_variation_syntax) ... ok\n\n----------------------------------------------------------------------\nRan 15 tests in 0.384s\n\nOK\n"
     },
     {
       "suite": "lab4",
       "passed": 15,
-      "log": "sphere panmixia mean 0.17661926460842498\nsphere ring mean 0.17661926460842498\nmichalewicz panmixia mean -1.4577200941753903\nmichalewicz ring mean -1.4577200941753903\ntest_actual_evaluation_count_includes_init_not_migrants (test_lab4.Invariants.test_actual_evaluation_count_includes_init_not_migrants) ... ok\ntest_budget_reproducibility_monotonicity (test_lab4.Invariants.test_budget_reproducibility_monotonicity) ... ok\ntest_fully_connected_snapshot_and_no_worsening (test_lab4.Invariants.test_fully_connected_snapshot_and_no_worsening) ... ok\ntest_functions (test_lab4.Invariants.test_functions) ... ok\ntest_initial_population_is_paired_between_architectures (test_lab4.Invariants.test_initial_population_is_paired_between_architectures) ... ok\ntest_invalid_budget (test_lab4.Invariants.test_invalid_budget) ... ok\ntest_invalid_config_values_fail_before_rng_or_output (test_lab4.Invariants.test_invalid_config_values_fail_before_rng_or_output) ... ok\ntest_migration_rejects_integer_destinations_before_truncation (test_lab4.Invariants.test_migration_rejects_integer_destinations_before_truncation) ... ok\ntest_offspring_without_variation_is_parent_and_does_not_mutate (test_lab4.Invariants.test_offspring_without_variation_is_parent_and_does_not_mutate) ... ok\ntest_reflection (test_lab4.Invariants.test_reflection) ... ok\ntest_reflection_symmetry_periodicity_and_invalid_inputs (test_lab4.Invariants.test_reflection_symmetry_periodicity_and_invalid_inputs) ... ok\ntest_ring_uses_snapshot (test_lab4.Invariants.test_ring_uses_snapshot) ... ok\ntest_saved_audit_rejects_nan_and_duplicate_runs (test_lab4.Invariants.test_saved_audit_rejects_nan_and_duplicate_runs) ... ok\ntest_scalar_oracles_for_random_vectors (test_lab4.Invariants.test_scalar_oracles_for_random_vectors) ... ok\ntest_short_custom_series_report_matches_actual_parameters (test_lab4.Invariants.test_short_custom_series_report_matches_actual_parameters) ... ok\n\n----------------------------------------------------------------------\nRan 15 tests in 0.425s\n\nOK\n"
+      "log": "sphere panmixia mean 0.17661926460842498\nsphere ring mean 0.17661926460842498\nmichalewicz panmixia mean -1.4577200941753903\nmichalewicz ring mean -1.4577200941753903\ntest_actual_evaluation_count_includes_init_not_migrants (test_lab4.Invariants.test_actual_evaluation_count_includes_init_not_migrants) ... ok\ntest_budget_reproducibility_monotonicity (test_lab4.Invariants.test_budget_reproducibility_monotonicity) ... ok\ntest_fully_connected_snapshot_and_no_worsening (test_lab4.Invariants.test_fully_connected_snapshot_and_no_worsening) ... ok\ntest_functions (test_lab4.Invariants.test_functions) ... ok\ntest_initial_population_is_paired_between_architectures (test_lab4.Invariants.test_initial_population_is_paired_between_architectures) ... ok\ntest_invalid_budget (test_lab4.Invariants.test_invalid_budget) ... ok\ntest_invalid_config_values_fail_before_rng_or_output (test_lab4.Invariants.test_invalid_config_values_fail_before_rng_or_output) ... ok\ntest_migration_rejects_integer_destinations_before_truncation (test_lab4.Invariants.test_migration_rejects_integer_destinations_before_truncation) ... ok\ntest_offspring_without_variation_is_parent_and_does_not_mutate (test_lab4.Invariants.test_offspring_without_variation_is_parent_and_does_not_mutate) ... ok\ntest_reflection (test_lab4.Invariants.test_reflection) ... ok\ntest_reflection_symmetry_periodicity_and_invalid_inputs (test_lab4.Invariants.test_reflection_symmetry_periodicity_and_invalid_inputs) ... ok\ntest_ring_uses_snapshot (test_lab4.Invariants.test_ring_uses_snapshot) ... ok\ntest_saved_audit_rejects_nan_and_duplicate_runs (test_lab4.Invariants.test_saved_audit_rejects_nan_and_duplicate_runs) ... ok\ntest_scalar_oracles_for_random_vectors (test_lab4.Invariants.test_scalar_oracles_for_random_vectors) ... ok\ntest_short_custom_series_report_matches_actual_parameters (test_lab4.Invariants.test_short_custom_series_report_matches_actual_parameters) ... ok\n\n----------------------------------------------------------------------\nRan 15 tests in 0.408s\n\nOK\n"
     },
     {
       "suite": "tools",
       "passed": 9,
-      "log": "test_combined_pdf_cannot_drop_a_plot_while_preserving_text (test_verification.IntegrityTests.test_combined_pdf_cannot_drop_a_plot_while_preserving_text) ... ok\ntest_invalid_variant_rejected_with_optimization_enabled (test_verification.IntegrityTests.test_invalid_variant_rejected_with_optimization_enabled) ... ok\ntest_links_reject_missing_and_outside_targets (test_verification.IntegrityTests.test_links_reject_missing_and_outside_targets) ... ok\ntest_same_page_count_does_not_allow_wrong_combined_order (test_verification.IntegrityTests.test_same_page_count_does_not_allow_wrong_combined_order) ... ok\ntest_saved_pdf_sources_and_combined_pages_match (test_verification.IntegrityTests.test_saved_pdf_sources_and_combined_pages_match) ... ok\ntest_saved_series_reject_changed_budget (test_verification.IntegrityTests.test_saved_series_reject_changed_budget) ... ok\ntest_stale_plot_is_rejected (test_verification.IntegrityTests.test_stale_plot_is_rejected) ... ok\ntest_stale_report_json_is_rejected (test_verification.IntegrityTests.test_stale_report_json_is_rejected) ... ok\ntest_variant_matches_all_configs (test_verification.IntegrityTests.test_variant_matches_all_configs) ... ok\n\n----------------------------------------------------------------------\nRan 9 tests in 0.809s\n\nOK\n"
+      "log": "test_combined_pdf_cannot_drop_a_plot_while_preserving_text (test_verification.IntegrityTests.test_combined_pdf_cannot_drop_a_plot_while_preserving_text) ... ok\ntest_invalid_variant_rejected_with_optimization_enabled (test_verification.IntegrityTests.test_invalid_variant_rejected_with_optimization_enabled) ... ok\ntest_links_reject_missing_and_outside_targets (test_verification.IntegrityTests.test_links_reject_missing_and_outside_targets) ... ok\ntest_same_page_count_does_not_allow_wrong_combined_order (test_verification.IntegrityTests.test_same_page_count_does_not_allow_wrong_combined_order) ... ok\ntest_saved_pdf_sources_and_combined_pages_match (test_verification.IntegrityTests.test_saved_pdf_sources_and_combined_pages_match) ... ok\ntest_saved_series_reject_changed_budget (test_verification.IntegrityTests.test_saved_series_reject_changed_budget) ... ok\ntest_stale_plot_is_rejected (test_verification.IntegrityTests.test_stale_plot_is_rejected) ... ok\ntest_stale_report_json_is_rejected (test_verification.IntegrityTests.test_stale_report_json_is_rejected) ... ok\ntest_variant_matches_all_configs (test_verification.IntegrityTests.test_variant_matches_all_configs) ... ok\n\n----------------------------------------------------------------------\nRan 9 tests in 0.818s\n\nOK\n"
     }
   ],
   "laboratory_audits": {
     "lab1": {
       "status": "passed",
-      "executed_at_utc": "2026-11-06T12:20:50.461025+00:00",
+      "executed_at_utc": "2026-11-06T12:32:54.343550+00:00",
       "environment": {
         "python": "3.12.14",
         "numpy": "2.5.4",
@@ -109,8 +109,21 @@
         "requested": true,
         "completed_runs": 60,
         "history_checkpoints_compared": 18000,
+        "comparison_tolerance": {
+          "absolute": 2e-12,
+          "relative": 1e-12
+        },
         "exact_final_fitness_matches": 60,
+        "final_fitness_matches_within_tolerance": 60,
+        "exact_history_checkpoint_matches": 18000,
+        "history_checkpoints_within_tolerance": 18000,
+        "exact_history_run_matches": 60,
+        "history_runs_within_tolerance": 60,
         "exact_saved_global_best_vector_matches": 1,
+        "saved_global_best_vector_matches_within_tolerance": 1,
+        "max_absolute_final_fitness_error": 0.0,
+        "max_absolute_history_error": 0.0,
+        "max_absolute_saved_vector_coordinate_error": 0.0,
         "replayed_vectors_scalar_oracle_checked": 60,
         "max_scalar_oracle_absolute_difference": 2.6645352591003757e-15,
         "final_vector_sha256": {
@@ -187,10 +200,11 @@
       },
       "limitations": [
         "Only the overall winning vector was archived; the other 59 final vectors are recomputed and checked against their fitness, not compared with unavailable original vectors.",
-        "Exact replays describe this Python/NumPy/platform; cross-platform floating-point paths may differ.",
+        "Replay floating values use abs_tol=2e-12 and rel_tol=1e-12 for cross-platform libm rounding; discrete counters and saved-artifact consistency remain strict. Exact and within-tolerance match counts are reported separately.",
         "The shifted-grid reference check is numerical evidence, not a rigorous global-optimality certificate.",
         "Runtime is excluded from replay comparisons; saved mean runtimes are recomputed only from the archived rows."
-      ]
+      ],
+      "artifact_hash_convention": "Per-lab hashes describe raw working-copy bytes; CSV line endings may differ after Git checkout."
     },
     "lab2": {
       "lab": 2,
@@ -303,7 +317,8 @@
         "best_schedule.csv": "119d16bf3c64c80f69e339eb3f38cf631dc3a8992d7e7222374ea77296ffa722",
         "report_content.json": "ec0db8410e5de3b9486b8a1df737b1c0e55aa874ca0fec00798e357195490324"
       },
-      "elapsed_seconds": 33.43407112499699
+      "elapsed_seconds": 32.762876458931714,
+      "artifact_hash_convention": "Per-lab hashes describe raw working-copy bytes; CSV line endings may differ after Git checkout."
     },
     "lab3": {
       "status": "passed",
@@ -368,7 +383,7 @@
         "No numerical experiment artifacts were modified by this audit."
       ],
       "sha256": {
-        "audit_saved.py": "bfa46cdb93c7c0ee55a89ca8689adf32ee63777a95b3e0a609d493497c0cf6f5",
+        "audit_saved.py": "68c2c3bdf7d440c78200c04f1a24002df42dffa7afeb6510ee262132d405e252",
         "config.json": "110a747d8eb0489998e30e016398292391f4d3f1f70465bf0cde7707e270791d",
         "data.csv": "f3642b528fec72e5891941f34fb7e12c7d7040fe9ab9e0aa94d3f6c8ac511f67",
         "evaluated_architectures.csv": "58eca3c34a8afe7660ed9d1e900e986a2891a74c9436e71e2168b45dc2fe5310",
@@ -383,8 +398,9 @@
         "results.json": "fb42e186849e549c869d9f2851a4eac5a20d62b629cae5f4906992331cff1897",
         "runs.csv": "a2c7dfdab1b3fde8ee577b7bffb8816fc9ace3e5e19377a11a3293181a9f458e",
         "selection_before_test.json": "400101756354d2e0860d787c208c5218cf4dedcfb114e2d1459b2a9cfbae2680",
-        "test_lab3.py": "bfa019eb6c229b49c4c1ec1d3b689f230040467ada779287a43950f141c13751"
-      }
+        "test_lab3.py": "f453b2d75137f934bddd264b8a0dee8ff6040c70214fb4bc20c2164de9496ffc"
+      },
+      "artifact_hash_convention": "Per-lab hashes describe raw working-copy bytes; CSV line endings may differ after Git checkout."
     },
     "lab4": {
       "status": "passed",
@@ -397,7 +413,8 @@
       "instrumented_objective_evaluations": 10800000,
       "max_replay_numeric_error": 0.0,
       "replay_note": "Сравниваются все сохранённые fitness/траектории и три архивных вектора; остальные векторы исходно не сохранялись.",
-      "seconds": 10.973249499918893
+      "seconds": 10.966073707910255,
+      "artifact_hash_convention": "Per-lab hashes describe raw working-copy bytes; CSV line endings may differ after Git checkout."
     }
   },
   "pdf_pages": [
@@ -423,8 +440,8 @@
   },
   "relative_markdown_links_checked": 45,
   "verified_file_sha256": {
-    "lab1/README.md": "f320b1abf2046e7473f4ab78d58220ca672495ff691f9f5d3832fceec7a71f7d",
-    "lab1/audit_saved.py": "e298b4c75e194605cd338b2cb53de3f9da89b7b6b583f189c7dcc02b464d959f",
+    "lab1/README.md": "ae85ed42848ea384e2eefea0139b21fede113e561ccfad4468600cb00f7b38a3",
+    "lab1/audit_saved.py": "08535cd106901ec2a22f6d5fc9d1c1cf13c4ac4e99cb9b1f4d4f947818cd5b8f",
     "lab1/config.json": "dcc8561344951dd9984e9bd2fd86c85d4e9246bfe8ed446bc84d84df67532030",
     "lab1/main.py": "a30eedd127bdefe54ff562079c47e46a4ba20525092998be87a0db6d4180e49c",
     "lab1/report_content.json": "3684765b2beee8130647bb0a2a50295dec66bf8eca6e4071a108909f2de1ac6c",
@@ -432,54 +449,54 @@
     "lab1/results/best_solution.json": "69369972a8d8704dbc2da49c605cf6383710bb8804eabaa6bbe08cf7aa8c2575",
     "lab1/results/convergence.png": "90b48860a45a6e49c5e28eb3ebcdc1c7edfec8fe38347f36c768d3fae90b8e3f",
     "lab1/results/distribution.png": "6408c9704ec365efa09e88c7a064940338d1bbfd32ebc9c2f965fcf61f57d2a6",
-    "lab1/results/history.csv": "7fa6cdc206ef8dfbc4ba3bafa809100a72059da7c9533f6d8884fe514ebdddbf",
+    "lab1/results/history.csv": "5777b0f9731a3711285b8aa3e121006ee6304cca538386ac64f85d7fe567de77",
     "lab1/results/reference.json": "d4876ed5d20bfb7ee435bd3396c0a57c8facc51509c8ebcd85fafeec7470f29b",
     "lab1/results/report_content.json": "a52c39da92327edae88e3b68172d1d22b1a70a636266ec1b4b212a6ac2ccfe80",
-    "lab1/results/runs.csv": "9485bc6b071acfe46261b55af13a3106b7124f301433c67eecdea5a2e6a59ff7",
-    "lab1/results/summary.csv": "9d8217b5177c79498b22bccf1e62cef9469138aa503dc137e3bcf7937f63baf0",
+    "lab1/results/runs.csv": "15bf6d9fd4675e703de2af8487ccf9b1df7309b8d0385af9df740dd0382d7528",
+    "lab1/results/summary.csv": "e86253d928e18c86f48d5c2b8a258f16fd9bff48687cbf3d0dc6928bc1def8ce",
     "lab1/results/summary.json": "12ef4bd484b5cc166d493d1be7ae65355189b5ac398e03ecd9976c2c39e402a2",
-    "lab1/test_lab1.py": "991dce7c4d9331799bae319e85fcda59a031baf4382fa02d8ae3d3fe49191175",
+    "lab1/test_lab1.py": "9ee5e4fe2a1faba2b553f6419ae2e80a25e0175cc5ef3a13a01066f0a26a2776",
     "lab2/README.md": "e1846c266e7e124c060a80c6d544433a3091e4918ece83753887477bd3e89fcc",
     "lab2/algorithm_flow.png": "27fb0d58d962ad17ce744b8cc5bee28891b7d2ae4824f6ef2aeb73c114fcef6f",
     "lab2/audit_saved.py": "0ae1942d5fbbc6d90001dc1cbd82475ba4b9fb7312ab3b8c99fa957251559146",
-    "lab2/best_schedule.csv": "119d16bf3c64c80f69e339eb3f38cf631dc3a8992d7e7222374ea77296ffa722",
+    "lab2/best_schedule.csv": "a620002b0240fa2fb9ca0241ac3c433f6489262c45c0a6b6458dfd26f398570f",
     "lab2/best_solution.json": "58bd98a0efd23eb0bdb2f770356a45bdcb456d44f46efdeffe8917dbdd4e9533",
     "lab2/config.json": "ba097762a501e9a2934b6afb37814d85e8cfdaf8f0d42ec7b810a290f5cea6cf",
     "lab2/convergence.png": "746311d257f75df1b43543a66e9e8e346968eeac9d4f9040e5e1a8f5b7594992",
     "lab2/data.json": "7aff961530c5d7e5354431e115e3bbda8f557bfaae6c3356602849577cd0927d",
     "lab2/examples.json": "d71a83639ccc1a5f6ad46198b3b19b5a579f9716cb913ada3b7679cf073fe079",
-    "lab2/histories.csv": "10a7d3de4d8ab86a1cbe8f277a517d0eb0752fa784e976f34d557c122ad6171f",
+    "lab2/histories.csv": "0e9f472dcee1fcb7916e45f764c8df5e33a644a87e4a296a6c05c450be790a91",
     "lab2/lab2.py": "892e1f900522b88c450507e955e4f04dac7487793edbc932e486253dc0a75763",
     "lab2/oracle.py": "1019902b4b5eb5262188ed9392ca3bd38bffb920ae41e8db6770beea47051a86",
-    "lab2/perrun.csv": "f17ca00be6b31f3494b5f08a0cfd9a145df6a9c225cedac92ff78c16ed0c883b",
+    "lab2/perrun.csv": "ee80eb5c64c5afa46247f9584e2dc81a641c147bd69ba944848b1862b18b9927",
     "lab2/quality.png": "aad703e032f05fcc8b758624c174e9995a6c8721fce66253cc6188e063b5a268",
     "lab2/report_content.json": "ec0db8410e5de3b9486b8a1df737b1c0e55aa874ca0fec00798e357195490324",
     "lab2/schedule.png": "498a52ace49951d0d89972737af0aa906d483a61ad0414739807f7511b4cda55",
     "lab2/solutions.json": "36a5675b89a6c401f493354122a4850ccaf31b4695d9bc2dd8b47b9ad837f164",
-    "lab2/summary.csv": "efebd42e1eca4d498ff6f251027ecc2567bb8edfdef0bb23d560f2104e7587f6",
+    "lab2/summary.csv": "93c3f92497063605091e4bd0dacc424ae3ce435597625bfa87a3fded1c711448",
     "lab2/summary.json": "dc4a7944dd194d7be7190bb58621ca58f7f343b2059212c82dbdc96fe1181f3f",
     "lab2/test_lab2.py": "c73bbecab32d003122a2b96ed680c31d9468bf1f286d56ee8f242dfb1ef091c8",
     "lab2/validation.json": "2dcd84ec4860fed47da21e5d679b0079e0a3d72fdeaaf3e217a5b0a7e75459a2",
     "lab3/README.md": "317f3a621b9890285a4cf8f4f462bf9b33a4d7c34ece5beb6d5dfd1e7a46e4af",
     "lab3/algorithm_flow.png": "518b066e1f9fbc23416e5a139e91e54dc010306e74d1aeebe6a2b2bf98cea9a1",
-    "lab3/audit_saved.py": "bfa46cdb93c7c0ee55a89ca8689adf32ee63777a95b3e0a609d493497c0cf6f5",
+    "lab3/audit_saved.py": "68c2c3bdf7d440c78200c04f1a24002df42dffa7afeb6510ee262132d405e252",
     "lab3/config.json": "110a747d8eb0489998e30e016398292391f4d3f1f70465bf0cde7707e270791d",
     "lab3/convergence.png": "e998d1636f00bd005e31f5bc02b1f6336864d8f31bd4a206bc7c67f72762404c",
-    "lab3/data.csv": "f3642b528fec72e5891941f34fb7e12c7d7040fe9ab9e0aa94d3f6c8ac511f67",
-    "lab3/evaluated_architectures.csv": "58eca3c34a8afe7660ed9d1e900e986a2891a74c9436e71e2168b45dc2fe5310",
-    "lab3/history.csv": "41196d487183e3344cc2c0c7d033eb24e89ba91eab6e7108e4e987682eff2f21",
+    "lab3/data.csv": "433f9071cd58067aedd3f1315ca06418f0e964253a0efed1e7e36622e60b914c",
+    "lab3/evaluated_architectures.csv": "19a69e1e524eeec9c41db3d30b7fffa36a82fd008a9c352a3e785f7369b507e4",
+    "lab3/history.csv": "bdac9f798175660e7a2f1d8a993a2470c8562e0daa33387d976dbf8ff91a4d95",
     "lab3/lab3.py": "1d71b44e47b9b0694781d33c34be1d13bfcbb41b91969ff7d0059df0b5dd0c4a",
     "lab3/model_1.npz": "61138615ad39ef4749ffc75c5432becbd28c8c2c49900c1018394d32634c64df",
     "lab3/model_2.npz": "9912ec35b5c2998804fd4cf365e0f19f7f919daeb2b23619693e4b25392808a2",
     "lab3/model_3.npz": "e2584b95425527c9c199eb83de9c957d96d6901d2f7747f057bc27114c1f5fcf",
-    "lab3/pareto_archive.csv": "c1e1b222926fd03eec7e7cabf52ba2cda58794b7003c5df99f6cfbcaafd83de3",
+    "lab3/pareto_archive.csv": "f0c63e9d0c1575645360983243e4a88f777246974f8bf8f99edc9aa6dd455a4c",
     "lab3/quality_complexity.png": "38634e66672925f0d396330fbdf877e13592ee921e8e6d6a18ce4095645a9934",
     "lab3/report_content.json": "7e726ca355de940466ad0f1cb96ef51229da89083334cadeccfcdb3a82cf559d",
-    "lab3/representatives.csv": "769dd2dcfbec4caf744a47a8713c81f36cdf2ceab20f059f9f3cad18bb0c42e7",
+    "lab3/representatives.csv": "274512ada5b1ccbc205771919a41c46de12bb862580d910a8e5b0c7710d9ea4a",
     "lab3/results.json": "fb42e186849e549c869d9f2851a4eac5a20d62b629cae5f4906992331cff1897",
-    "lab3/runs.csv": "a2c7dfdab1b3fde8ee577b7bffb8816fc9ace3e5e19377a11a3293181a9f458e",
+    "lab3/runs.csv": "54f7d5ae3a84f27278a571bcc0ecfd67259e4bf72a7c9573661edde59a6de382",
     "lab3/selection_before_test.json": "400101756354d2e0860d787c208c5218cf4dedcfb114e2d1459b2a9cfbae2680",
-    "lab3/test_lab3.py": "bfa019eb6c229b49c4c1ec1d3b689f230040467ada779287a43950f141c13751",
+    "lab3/test_lab3.py": "f453b2d75137f934bddd264b8a0dee8ff6040c70214fb4bc20c2164de9496ffc",
     "lab4/README.md": "0e09d965c0051cf67930c6d5462c2643b9b290a5664dbf664f2bfd9a498eaa0e",
     "lab4/algorithm_flow.png": "5620e36c0e615b928f0d54bb99fe315ce98115b1c09bffeecf98721f73515da5",
     "lab4/audit_saved.py": "febb9bbd58212f4501a4cc905a00fc04aeb9c062cccda9100d6e41621941492b",
@@ -489,18 +506,18 @@
     "lab4/convergence_rastrigin.png": "b4c34cc2f3e8b786aba45dc8016197705acb14938f9181dd8348a3314785ad4d",
     "lab4/convergence_sphere.png": "5cbdae655830f3609f39a174175a30a01ff62691a5dbf3e71b00d1bb35916a57",
     "lab4/distributions.png": "c46c1da909f5e65a0db049ea836292613b8392d6b9289c5ff627d0c9cb9c4a67",
-    "lab4/history.csv": "57e61b51e389a2a2f05fbb5e800d8647cde4e2cc11ddaeaef5e9c19cae765e0e",
+    "lab4/history.csv": "771945ebd5e8bae094e4992197771f426345dc768277e5c92872ee078d20b42a",
     "lab4/main.py": "f7a34344359b6a3ea95747f81d1f98451af5fc36bfdd2393936ad86169f02e72",
-    "lab4/paired_comparison.csv": "e524e9f6cc150e27b56fba305a83c22f3b1e151ef7ac06c0c68c3f409f1f452d",
+    "lab4/paired_comparison.csv": "b795e2db461ea6e11816da35fd85c8feef5f260765def065a7837d023b2c7c77",
     "lab4/proposal.txt": "407fc07c801350c4ff5013741ab1452bb13761f8c4971837594b9c3391faf6a8",
     "lab4/report_content.json": "b591d13811773f80920db7704014d8a7951c61132346583eb21959d569764288",
-    "lab4/runs.csv": "e8795b4bbc384f5efdebd1e5421aae5b5ced06103139325b22e69c708d8bff53",
-    "lab4/summary.csv": "e237ca0267061522d5e6bee929e273073971943a56880bdb9b168f611b136edf",
+    "lab4/runs.csv": "ba6dc7125108cf4afb798e49568724186fa7836304ca3d5cfbd2adf05d56082c",
+    "lab4/summary.csv": "bcc87af0b64272d047d0cfdea64a86f87e0a92a053dcdf6129913d678bd82d48",
     "lab4/test_lab4.py": "543eb5189cc7137f92ed3b2cc1215126c3b780926fb92f006307a6f81580c1c2",
-    "tools/README.md": "d6f5df2d9cbfa65bdbb514f267d7f90429d0d24ec0363d2313093e4f0cb951c4",
+    "tools/README.md": "16151c7c3ddefe29ebb63db4e5f05ac9e0832cc567b6391d0932646e26887112",
     "tools/build_reports.py": "5c190b915c85276ed45956f69438337d479bf2aaeed92427c0319f8a8bd2828d",
     "tools/test_verification.py": "fd93b8cac476753225b7fa4d705f4d14f7a3ae482f57f37d77540c84fc9da99b",
-    "tools/verify_bundle.py": "0c3ab3297d19298a7b89b4b22054f171e900f0af6a557c451144e3290d112906",
+    "tools/verify_bundle.py": "e5ae0e4b3d34c7521a345e161649f8a00d5ba7b6ea2018d7ac600e7a681ff7a2",
     "reports/lab1_report.pdf": "22a0603291596942aff256b086504f3c6b739bd5a403e0e9ce2b3586f1774ac6",
     "reports/lab2_report.pdf": "6c442e7a56746b3bd6983e1642d884b8add6a85c5d986ebc0282cbb9c704a21d",
     "reports/lab3_report.pdf": "480c4ac416aeb342d2ce161071c46fdd9ff44f6ca375689fc7566232d9e631bc",
@@ -509,10 +526,11 @@
     "requirements.txt": "af9c9ea6a882ecdb9816a50416e4e777ff38447e9caf3b8e4c630ce2f227d324",
     "requirements-dev.txt": "3faa011c74cab838c3697daf0a4819610f8a29b07cf38fe63dd6acd6382222ef",
     ".python-version": "7b55f8e67b5623c4bef3fa691288da9437d79d3aba156de48d481db32ac7d16d",
-    ".github/workflows/verify.yml": "b65a8933932d95642a93cfa7e47ea51bab1f1d323199adb24bae234fba6852eb",
-    "README.md": "434fd69209dcd61c3c19bbe4b377246d2908b1f4f061672b184a0b32fdc0253c",
+    ".github/workflows/verify.yml": "c3288b5f03ca2c7f1f941ad48208c1107fcce52ff0432b6974c3573255b4a172",
+    "README.md": "ffdaadc35ad66417a9bdef0470a24c9545ef311a985ebd659fd1e6108f48f682",
     "all_reports.pdf": "47aeca5d34541cb132ba00d065e95d0a906f9ad47b6e8fb61a204c932e36fdb6"
   },
+  "verified_file_hash_convention": "SHA256 of Git-normalized LF text; exact bytes for binary files.",
   "notes": [
     "Исходные времена запусков сохранены; повторные сравнения исключают wall time.",
     "ЛР3: равны бюджеты вызовов fitness; фактические обучения и градиентные шаги учитываются отдельно.",

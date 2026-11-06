@@ -28,3 +28,15 @@ jobs:
         run: python -m pip install -r requirements-dev.txt
       - name: Проверить код, серии запусков и PDF
         run: python tools/verify_bundle.py --replay
+      - name: Сохранить протоколы этой проверки
+        uses: actions/upload-artifact@v7
+        with:
+          name: verification-${{ github.sha }}
+          path: |
+            verification.json
+            lab1/audit.json
+            lab2/audit.json
+            lab3/audit.json
+            lab4/audit.json
+          if-no-files-found: error
+          retention-days: 14

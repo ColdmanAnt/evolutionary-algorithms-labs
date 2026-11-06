@@ -61,7 +61,7 @@
     "No numerical experiment artifacts were modified by this audit."
   ],
   "sha256": {
-    "audit_saved.py": "bfa46cdb93c7c0ee55a89ca8689adf32ee63777a95b3e0a609d493497c0cf6f5",
+    "audit_saved.py": "68c2c3bdf7d440c78200c04f1a24002df42dffa7afeb6510ee262132d405e252",
     "config.json": "110a747d8eb0489998e30e016398292391f4d3f1f70465bf0cde7707e270791d",
     "data.csv": "f3642b528fec72e5891941f34fb7e12c7d7040fe9ab9e0aa94d3f6c8ac511f67",
     "evaluated_architectures.csv": "58eca3c34a8afe7660ed9d1e900e986a2891a74c9436e71e2168b45dc2fe5310",
@@ -76,6 +76,7 @@
     "results.json": "fb42e186849e549c869d9f2851a4eac5a20d62b629cae5f4906992331cff1897",
     "runs.csv": "a2c7dfdab1b3fde8ee577b7bffb8816fc9ace3e5e19377a11a3293181a9f458e",
     "selection_before_test.json": "400101756354d2e0860d787c208c5218cf4dedcfb114e2d1459b2a9cfbae2680",
-    "test_lab3.py": "bfa019eb6c229b49c4c1ec1d3b689f230040467ada779287a43950f141c13751"
-  }
+    "test_lab3.py": "f453b2d75137f934bddd264b8a0dee8ff6040c70214fb4bc20c2164de9496ffc"
+  },
+  "artifact_hash_convention": "Per-lab hashes describe raw working-copy bytes; CSV line endings may differ after Git checkout."
 }

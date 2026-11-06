@@ -31,6 +31,13 @@ def digest(data):
     return hashlib.sha256(data).hexdigest()
 
 
+def canonical_file_digest(path):
+    data=path.read_bytes()
+    if path.suffix in {'.py','.md','.json','.csv','.txt','.yml','.yaml'} or path.name=='.python-version':
+        data=data.replace(b'\r\n',b'\n')
+    return digest(data)
+
+
 def compact(text):
     return ''.join(str(text).split())
 
@@ -207,6 +214,7 @@ def run_checks(root,replay=False):
         evidence=json.loads(run.stdout)
         require(evidence and evidence.get('status','passed')=='passed' and evidence.get('passed',True) is True,f'ЛР{lab}: аудит не подтвердил успех')
         laboratory_audits[f'lab{lab}']=evidence
+        evidence['artifact_hash_convention']='Per-lab hashes describe raw working-copy bytes; CSV line endings may differ after Git checkout.'
         if replay:
             (root/f'lab{lab}'/'audit.json').write_text(json.dumps(evidence,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
         print(f'ЛР{lab}: сохранённые данные'+(' и полная серия' if replay else '')+' проверены',file=sys.stderr,flush=True)
@@ -217,10 +225,10 @@ def run_checks(root,replay=False):
     for directory in ['lab1','lab2','lab3','lab4','tools','reports']:
         for p in sorted((root/directory).rglob('*')):
             if p.is_file() and '__pycache__' not in p.parts and p.name!='audit.json':
-                fingerprints[p.relative_to(root).as_posix()]=digest(p.read_bytes())
+                fingerprints[p.relative_to(root).as_posix()]=canonical_file_digest(p)
     for relative in ['variant.json','requirements.txt','requirements-dev.txt','.python-version',
                      '.github/workflows/verify.yml','README.md','all_reports.pdf']:
-        fingerprints[relative]=digest((root/relative).read_bytes())
+        fingerprints[relative]=canonical_file_digest(root/relative)
     # В проектном протоколе используется московское время UTC+3; не требует
     # внешней базы IANA/tzdata в стандартной установке Python на Windows.
     now=datetime.now(timezone(timedelta(hours=3),name='Europe/Moscow'))
@@ -231,6 +239,7 @@ def run_checks(root,replay=False):
                 series=series,total_runs=sum(s['runs'] for s in series),unit_tests_passed=sum(t['passed'] for t in tests),unit_tests=tests,
                 laboratory_audits=laboratory_audits,pdf_pages=pdfs['individual_pages'],combined_pdf_pages=pdfs['combined_pages'],
                 pdf_validation=pdfs,relative_markdown_links_checked=links,verified_file_sha256=fingerprints,
+                verified_file_hash_convention='SHA256 of Git-normalized LF text; exact bytes for binary files.',
                 notes=['Исходные времена запусков сохранены; повторные сравнения исключают wall time.',
                        'ЛР3: равны бюджеты вызовов fitness; фактические обучения и градиентные шаги учитываются отдельно.',
                        'Все560 запусков повторяются только с --replay; быстрый режим проверяет сохранённые данные и модели.',

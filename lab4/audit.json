@@ -9,5 +9,6 @@
   "instrumented_objective_evaluations": 10800000,
   "max_replay_numeric_error": 0.0,
   "replay_note": "Сравниваются все сохранённые fitness/траектории и три архивных вектора; остальные векторы исходно не сохранялись.",
-  "seconds": 10.973249499918893
+  "seconds": 10.966073707910255,
+  "artifact_hash_convention": "Per-lab hashes describe raw working-copy bytes; CSV line endings may differ after Git checkout."
 }

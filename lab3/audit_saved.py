@@ -168,7 +168,8 @@ def verify_saved(replay=False, *, directory=None):
     y = np.array([float(r['y']) for r in rows])
     indices_csv = {s: np.array([i for i, r in enumerate(rows) if r['split'] == s]) for s in ['train', 'validation', 'test']}
     generated_x, generated_z, generated_y, indices, generated_mean, generated_scale = make_data(config['data_seed'])
-    require(np.array_equal(x, generated_x) and np.array_equal(y, generated_y), 'data.csv differs from recorded data seed')
+    close(x, generated_x, 'data.csv: generated feature values', errors)
+    require(np.array_equal(y, generated_y), 'data.csv: labels differ from recorded data seed')
     for name, count in [('train', 280), ('validation', 100), ('test', 100)]:
         require(len(indices_csv[name]) == count and set(indices_csv[name]) == set(indices[name]), f'data.csv: {name} split mismatch')
     mean = np.sum(x[indices_csv['train']], axis=0) / len(indices_csv['train'])

@@ -1,6 +1,6 @@
 {
   "status": "passed",
-  "executed_at_utc": "2026-11-06T12:20:50.461025+00:00",
+  "executed_at_utc": "2026-11-06T12:32:54.343550+00:00",
   "environment": {
     "python": "3.12.14",
     "numpy": "2.5.4",
@@ -26,8 +26,21 @@
     "requested": true,
     "completed_runs": 60,
     "history_checkpoints_compared": 18000,
+    "comparison_tolerance": {
+      "absolute": 2e-12,
+      "relative": 1e-12
+    },
     "exact_final_fitness_matches": 60,
+    "final_fitness_matches_within_tolerance": 60,
+    "exact_history_checkpoint_matches": 18000,
+    "history_checkpoints_within_tolerance": 18000,
+    "exact_history_run_matches": 60,
+    "history_runs_within_tolerance": 60,
     "exact_saved_global_best_vector_matches": 1,
+    "saved_global_best_vector_matches_within_tolerance": 1,
+    "max_absolute_final_fitness_error": 0.0,
+    "max_absolute_history_error": 0.0,
+    "max_absolute_saved_vector_coordinate_error": 0.0,
     "replayed_vectors_scalar_oracle_checked": 60,
     "max_scalar_oracle_absolute_difference": 2.6645352591003757e-15,
     "final_vector_sha256": {
@@ -104,8 +117,9 @@
   },
   "limitations": [
     "Only the overall winning vector was archived; the other 59 final vectors are recomputed and checked against their fitness, not compared with unavailable original vectors.",
-    "Exact replays describe this Python/NumPy/platform; cross-platform floating-point paths may differ.",
+    "Replay floating values use abs_tol=2e-12 and rel_tol=1e-12 for cross-platform libm rounding; discrete counters and saved-artifact consistency remain strict. Exact and within-tolerance match counts are reported separately.",
     "The shifted-grid reference check is numerical evidence, not a rigorous global-optimality certificate.",
     "Runtime is excluded from replay comparisons; saved mean runtimes are recomputed only from the archived rows."
-  ]
+  ],
+  "artifact_hash_convention": "Per-lab hashes describe raw working-copy bytes; CSV line endings may differ after Git checkout."
 }

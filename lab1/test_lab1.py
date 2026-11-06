@@ -1,6 +1,7 @@
 import unittest
 import json
 import math
+from copy import deepcopy
 import shutil
 import subprocess
 import sys
@@ -203,5 +204,46 @@ class Lab1Tests(unittest.TestCase):
             data=json.loads(target.read_text(encoding='utf-8'));data[0]['mean']+=.1
             target.write_text(json.dumps(data),encoding='utf-8')
             with self.assertRaises(AssertionError):verify_saved(folder=root)
+
+    def test_replay_float_tolerance_counts_exact_and_ulp_matches_honestly(self):
+        from audit_saved import compare_replay
+        saved=dict(seed='100',best='-8.0',evaluations='160',generations='1')
+        history=[(0,80,-3.),(1,160,-8.)]
+        result=dict(seed=100,best=-8.,evaluations=160,generations=1,feasible=True,
+                    history=list(history),x=[1.,2.])
+        exact=compare_replay(result,saved,history,expected_budget=160,saved_vector=[1.,2.])
+        self.assertEqual(exact['exact_final_fitness_matches'],1)
+        self.assertEqual(exact['exact_history_checkpoint_matches'],2)
+        self.assertEqual(exact['exact_saved_global_best_vector_matches'],1)
+        result['best']=math.nextafter(-8.,0.)
+        result['history']=[(g,e,math.nextafter(v,0.)) for g,e,v in history]
+        result['x'][0]=math.nextafter(1.,2.)
+        rounded=compare_replay(result,saved,history,expected_budget=160,saved_vector=[1.,2.])
+        self.assertEqual(rounded['exact_final_fitness_matches'],0)
+        self.assertEqual(rounded['exact_history_checkpoint_matches'],0)
+        self.assertEqual(rounded['exact_history_run_matches'],0)
+        self.assertEqual(rounded['exact_saved_global_best_vector_matches'],0)
+        self.assertEqual(rounded['final_fitness_matches_within_tolerance'],1)
+        self.assertEqual(rounded['history_checkpoints_within_tolerance'],2)
+        self.assertEqual(rounded['saved_global_best_vector_matches_within_tolerance'],1)
+        self.assertEqual(rounded['max_absolute_final_fitness_error'],abs(math.nextafter(-8.,0.)+8.))
+        self.assertGreater(rounded['max_absolute_history_error'],0.)
+        self.assertGreater(rounded['max_absolute_saved_vector_coordinate_error'],0.)
+
+    def test_replay_tolerance_rejects_material_and_discrete_changes(self):
+        from audit_saved import compare_replay
+        saved=dict(seed='100',best='-8.0',evaluations='160',generations='1')
+        history=[(0,80,-3.),(1,160,-8.)]
+        base=dict(seed=100,best=-8.,evaluations=160,generations=1,feasible=True,
+                  history=list(history),x=[1.,2.])
+        changes=[dict(best=-7.999),dict(history=[(0,80,-3.),(1,160,-7.999)]),
+                 dict(x=[1.001,2.]),dict(seed=101),dict(evaluations=159),dict(generations=2),
+                 dict(history=[(0,80,-3.)]),dict(history=[(0,80,-3.),(1,159,-8.)]),
+                 dict(history=[(0,80,-3.),(2,160,-8.)])]
+        for changeset in changes:
+            with self.subTest(changes=changeset):
+                result=deepcopy(base);result.update(changeset)
+                with self.assertRaises(AssertionError):
+                    compare_replay(result,saved,history,expected_budget=160,saved_vector=[1.,2.])
 
 if __name__=='__main__':unittest.main()
