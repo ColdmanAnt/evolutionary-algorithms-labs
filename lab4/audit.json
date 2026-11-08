@@ -6381,6 +6381,6 @@
   },
   "compatibility_policy": "https://numpy.org/doc/stable/reference/random/compatibility.html",
   "replay_note": "Сравниваются все сохранённые fitness/траектории и три архивных вектора; остальные векторы исходно не сохранялись.",
-  "seconds": 21.912348083918914,
+  "seconds": 22.00979816704057,
   "artifact_hash_convention": "Per-lab hashes describe raw working-copy bytes; CSV line endings may differ after Git checkout."
 }
